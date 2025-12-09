@@ -1,8 +1,9 @@
+import { defineConfig } from 'eslint/config'
 import neostandard, { resolveIgnoresFromGitignore } from 'neostandard'
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 
-export default [
+export default defineConfig(
   ...neostandard({
     ignores: [
       ...resolveIgnoresFromGitignore(),
@@ -97,5 +98,5 @@ export default [
     rules: {
       'no-console': 'off',
     },
-  },
-]
+  }
+)
