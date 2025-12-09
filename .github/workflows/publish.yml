@@ -24,9 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write
       packages: write
-      attestations: write
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
@@ -34,7 +32,10 @@ jobs:
           node-version: 24
           registry-url: https://npm.pkg.github.com/
           cache: npm
-          scope: '@ropescore'
+          scope: '@lyra-sports'
+      - run: |
+          sed -i 's,@ropescore/rulesets,@lyra-sports/rulesets,g' package.json
+          sed -i 's,@ropescore/rulesets,@lyra-sports/rulesets,g' package-lock.json
       - run: npm ci --prefer-offline
       - run: npm publish
         env:
