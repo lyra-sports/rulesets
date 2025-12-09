@@ -34,6 +34,7 @@ jobs:
           node-version: 24
           registry-url: https://npm.pkg.github.com/
           cache: npm
+          scope: '@ropescore'
       - run: npm ci --prefer-offline
       - run: npm publish
         env:
