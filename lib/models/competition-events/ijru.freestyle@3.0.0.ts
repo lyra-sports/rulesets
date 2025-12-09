@@ -352,7 +352,7 @@ export default {
       else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 6)
       else raw[scoreType] = roundTo(ijruAverage(scores), 2) // D, Q
 
-      if (typeof raw[scoreType] !== 'number' || isNaN(Number(raw[scoreType]))) raw[scoreType] = (['D', 'aF', 'aE', 'aM'].includes(scoreType) ? 0 : 1)
+      if (typeof raw[scoreType] !== 'number' || isNaN(raw[scoreType])) raw[scoreType] = (['D', 'aF', 'aE', 'aM'].includes(scoreType) ? 0 : 1)
       if (scoreType === 'aM' && noMusic) raw[scoreType] = 0
     }
 
