@@ -1,8 +1,8 @@
-# RopeScore Rulesets
+# FlowScore Rulesets
 
-[![codecov](https://codecov.io/gh/RopeScore/rulesets/graph/badge.svg?token=4OQJQODHGR)](https://codecov.io/gh/RopeScore/rulesets)
+[![codecov](https://codecov.io/gh/lyra-sports/rulesets/graph/badge.svg?token=4OQJQODHGR)](https://codecov.io/gh/lyra-sports/rulesets)
 
-RopeScore rulesets provides a vast and open library of calculations for Rope
+FlowScore rulesets provides a vast and open library of calculations for Rope
 Skipping competition rules.
 
 These rules are exposed on four different levels from this package:
