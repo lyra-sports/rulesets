@@ -70,12 +70,12 @@
     "prepack": "npm run build"
   },
   "devDependencies": {
-    "@tsconfig/node20": "^20.1.4",
-    "@types/node": "^22.13.10",
-    "eslint": "^9.22.0",
-    "glob": "^11.0.1",
-    "neostandard": "^0.12.1",
-    "tsx": "^4.19.3",
-    "typescript": "5.8"
+    "@tsconfig/node24": "^24.0.3",
+    "@types/node": "^24.10.2",
+    "eslint": "^9.39.1",
+    "glob": "^13.0.0",
+    "neostandard": "^0.12.2",
+    "tsx": "^4.21.0",
+    "typescript": "5.9"
   }
 }
