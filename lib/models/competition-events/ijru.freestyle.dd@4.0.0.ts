@@ -266,7 +266,7 @@ export default {
   options: [
     { id: 'diffTurnerSkillDivisor', name: 'Difficulty Turner - number of skills counted', type: 'number', min: 0, step: 1 },
   ],
-  judges: [presentationJudge as JudgeTypeGetter<Option>, technicalJudgeFactory({ discipline: 'dd' }) as JudgeTypeGetter<Option>, difficultyJumperJudge, difficultyTurnerJudge],
+  judges: [presentationJudge, technicalJudgeFactory({ discipline: 'dd' }) as JudgeTypeGetter<Option>, difficultyJumperJudge, difficultyTurnerJudge],
 
   calculateEntry: (meta, res, options) => {
     const results = res.filter(r => matchMeta(r.meta, meta))

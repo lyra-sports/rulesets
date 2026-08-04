@@ -63,6 +63,7 @@
     "validate": "tsx bin/validate.ts",
     "lint:code": "eslint .",
     "lint:fix": "npm run lint:code -- --fix",
+    "pretypecheck": "npm run build:data",
     "typecheck": "tsc --project tsconfig.eslint.json --noEmit",
     "build": "npm run build:data && npm run build:code",
     "build:code": "tsc -b",
