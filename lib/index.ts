@@ -5,6 +5,7 @@ export {
   isMarkScoresheet,
   isTallyScoresheet,
   createMarkReducer,
+  normaliseTally,
   simpleReducer,
 } from './helpers/helpers.js'
 export * from './errors.js'

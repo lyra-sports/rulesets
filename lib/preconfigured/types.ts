@@ -1,4 +1,4 @@
-import { type JudgeTypeGetter, type CompetitionEventModel, type OverallModel, type CompetitionEventsOptions, type Options } from '../models/types.js'
+import { type CompetitionEventModel, type OverallModel, type CompetitionEventsOptions, type Options } from '../models/types.js'
 
 export type CompetitionEventDefinition = `e.${string}.${'fs' | 'sp' | 'oa'}.${'sr' | 'dd' | 'wh' | 'ts' | 'xd'}.${string}.${number}.${`${number}x${number}` | number}@${string}`
 
@@ -18,7 +18,7 @@ export function partiallyConfigureCompetitionEventModel <Option extends string> 
     modelId: model.id,
     name: options.name,
     options: model.options.filter(o => !(o.id in options.options)),
-    judges: model.judges.map(j => ((o: Partial<Record<Option, unknown>>) => j({ ...o, ...options.options })) as JudgeTypeGetter<Option>),
+    judges: model.judges.map(j => (o: Partial<Record<Option, unknown>>) => j({ ...o, ...options.options })),
     calculateEntry (meta, results, o) {
       return model.calculateEntry(meta, results, { ...o, ...options.options })
     },
