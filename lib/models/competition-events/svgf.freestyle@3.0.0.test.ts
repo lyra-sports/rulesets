@@ -26,6 +26,10 @@ void test('svgf.freestyle@3.0.0', async t => {
   })
 
   await t.test('ijruAverage', async t => {
+    await t.test('Should return undefined for an empty list', () => {
+      assert.strictEqual(ijruAverage([]), undefined)
+    })
+
     await t.test('Should return single number', () => {
       assert.strictEqual(ijruAverage([1]), 1)
     })

@@ -1,4 +1,4 @@
-import { RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
 import { normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers.js'
 import { type JudgeTypeGetter, type JudgeTallyFieldDefinition, type TableDefinition, type CompetitionEventModel } from '../types.js'
 import { ijruAverage } from '../../helpers/ijru.js'
@@ -354,13 +354,21 @@ export default {
 
     const raw: Record<string, number> = {}
 
+    const scoreTypeJudges = { D: 'D', aF: 'Pa', aE: 'Pr', aM: 'Pr', m: 'Pa', v: 'R', Q: 'R' } as const
+
     for (const scoreType of ['D', 'aF', 'aE', 'aM', 'm', 'v', 'Q', 'U'] as const) {
       const scores = results.map(el => el.result[scoreType]).filter(el => typeof el === 'number')
-      if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 4)
-      else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 6)
-      else raw[scoreType] = roundTo(ijruAverage(scores), 2) // D, Q, U
+      const score = ijruAverage(scores)
 
-      if (typeof raw[scoreType] !== 'number' || isNaN(raw[scoreType])) raw[scoreType] = (['D', 'U', 'aF', 'aE', 'aM'].includes(scoreType) ? 0 : 1)
+      if (scoreType === 'U') {
+        raw[scoreType] = score == null ? 0 : roundTo(score, 2)
+        continue
+      }
+      if (score == null) throw new RSRMissingJudgeResultError(scoreTypeJudges[scoreType])
+
+      if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(score, 4)
+      else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(score, 6)
+      else raw[scoreType] = roundTo(score, 2) // D, Q
     }
 
     raw.M = roundTo(-(1 - raw.m - raw.v), 2) // the minus is because they're already prepped to 1- and that needs to be reversed

@@ -1,4 +1,5 @@
-export const ijruAverage = (_scores: readonly number[]): number => {
+export const ijruAverage = (_scores: readonly number[]): number | undefined => {
+  if (_scores.length === 0) return undefined
   // sort ascending
   const scores = [..._scores]
   scores.sort(function (a, b) {

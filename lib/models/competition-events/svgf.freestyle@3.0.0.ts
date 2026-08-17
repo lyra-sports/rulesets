@@ -1,4 +1,4 @@
-import { RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
 import { normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer, clampNumber } from '../../helpers/helpers.js'
 import type { CompetitionEventModel, JudgeTallyFieldDefinition, JudgeTypeGetter, TableDefinition } from '../types.js'
 import { ijruAverage } from '../../helpers/ijru.js'
@@ -354,13 +354,17 @@ export default {
 
     const raw: Record<string, number> = {}
 
+    const scoreTypeJudges = { D: 'D', aF: 'Pa', aE: 'Pr', aM: 'Pr', m: 'Pa', v: 'R', Q: 'R' } as const
+
     for (const scoreType of ['D', 'aF', 'aE', 'aM', 'm', 'v', 'Q'] as const) {
       const scores = results.map(el => el.result[scoreType]).filter(el => typeof el === 'number')
-      if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 0)
-      else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 6)
-      else raw[scoreType] = roundTo(ijruAverage(scores), 2) // D, Q
+      const score = ijruAverage(scores)
+      if (score == null) throw new RSRMissingJudgeResultError(scoreTypeJudges[scoreType])
 
-      if (typeof raw[scoreType] !== 'number' || isNaN(raw[scoreType])) raw[scoreType] = (['D', 'aF', 'aE', 'aM'].includes(scoreType) ? 0 : 1)
+      if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(score, 0)
+      else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(score, 6)
+      else raw[scoreType] = roundTo(score, 2) // D, Q
+
       if (scoreType === 'aM' && noMusic) raw[scoreType] = 0
     }
 

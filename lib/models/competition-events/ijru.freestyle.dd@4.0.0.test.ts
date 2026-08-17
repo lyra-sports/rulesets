@@ -3,7 +3,7 @@ import test from 'node:test'
 import * as mod from './ijru.freestyle.dd@4.0.0.js'
 import * as srMod from './ijru.freestyle.sr@4.0.0.js'
 import { type JudgeResult, type EntryMeta, type JudgeMeta } from '../types.js'
-import { RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
 import { markGeneratorFactory } from '../../helpers/helpers.test.js'
 
 void test('ijru.freestyle.dd@4.0.0', async t => {
@@ -348,6 +348,15 @@ void test('ijru.freestyle.dd@4.0.0', async t => {
         },
         statuses: {},
       })
+    })
+
+    await t.test('throws when a judge type has no results', () => {
+      const scores: JudgeResult[] = [
+        { meta: jMeta('1', 'P'), result: { p: 20, nm: 2 }, statuses: {} },
+        { meta: jMeta('21', 'T'), result: { nm: 3, nv: 4 }, statuses: {} },
+        { meta: jMeta('31', 'Dj'), result: { d: 8.5 }, statuses: {} },
+      ]
+      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), RSRMissingJudgeResultError)
     })
   })
 })
