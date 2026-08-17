@@ -1,8 +1,8 @@
-import { RSRWrongJudgeTypeError } from '../../errors'
-import type { MarkReducer } from '../../helpers/helpers'
-import { clampNumber, normaliseTally, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers'
-import { type JudgeTypeGetter, type TableDefinition, type CompetitionEventModel } from '../types'
-import { ijruAverage } from '../../helpers/ijru'
+import { RSRWrongJudgeTypeError } from '../../errors.js'
+import type { MarkReducer } from '../../helpers/helpers.js'
+import { clampNumber, normaliseTally, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers.js'
+import { type JudgeTypeGetter, type TableDefinition, type CompetitionEventModel } from '../types.js'
+import { ijruAverage } from '../../helpers/ijru.js'
 
 type Option = 'discipline'
 

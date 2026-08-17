@@ -1,4 +1,4 @@
-import { RSUnsupported } from './errors'
+import { RSUnsupported } from './errors.js'
 import type { CompetitionEventModel, OverallModel } from './models/types.js'
 import type { CompetitionEvent, Overall } from './preconfigured/types.js'
 import type { Ruleset } from './rulesets/types.js'
