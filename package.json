@@ -72,13 +72,16 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
-    "@tsconfig/node24": "^24.0.3",
+    "@tsconfig/node24": "^24.0.5",
     "@types/node": "^24.10.2",
     "eslint": "^9.39.1",
-    "glob": "^13.0.0",
-    "neostandard": "^0.12.2",
-    "tsx": "^4.21.0",
+    "glob": "^13.0.6",
+    "neostandard": "^0.13.0",
+    "tsx": "^4.23.12",
     "typescript": "5.9",
-    "typescript-eslint": "^8.49.0"
+    "typescript-eslint": "^8.67.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
   }
 }
