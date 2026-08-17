@@ -2,7 +2,7 @@ import type { MarkReducerReturn } from '../helpers/helpers.js'
 import { isObject } from '../helpers/helpers.js'
 import { type CompetitionEventDefinition } from '../preconfigured/types.js'
 
-export interface JudgeType<MarkSchema extends string, TallySchema extends string = MarkSchema> {
+export interface JudgeType<MarkSchema extends string, TallySchema extends string = MarkSchema, Status extends string = string> {
   /**
    * This should be unique for the model, but may be the same as a judge used
    * in another model. For example it could be D for a Difficulty judge.
@@ -24,6 +24,12 @@ export interface JudgeType<MarkSchema extends string, TallySchema extends string
    * to generate tabulator interfaces.
    */
   tallyDefinitions: Readonly<Array<JudgeTallyFieldDefinition<TallySchema>>>
+  /**
+   * These are the statuses this judge type may report in the statuses object of
+   * the judge result, along with how to present them to a user. A judge type
+   * that reports no statuses should provide an empty array.
+   */
+  statusDefinitions: Readonly<Array<ModelStatus<Status>>>
   /**
    * This returns what we call a mark reducer, an addMark function which you can
    * pass marks to one at a time, likely live as the marks get made by the
@@ -50,7 +56,7 @@ export interface JudgeType<MarkSchema extends string, TallySchema extends string
   calculateJudgeResult: (scoresheet: TallyScoresheet<TallySchema>) => JudgeResult
 }
 
-export type JudgeTypeGetter<Option extends string = string, MarkSchema extends string = string, TallySchema extends string = string> = (options: Options<Option>) => Readonly<JudgeType<MarkSchema, TallySchema>>
+export type JudgeTypeGetter<Option extends string = string, MarkSchema extends string = string, TallySchema extends string = string, Status extends string = string> = (options: Options<Option>) => Readonly<JudgeType<MarkSchema, TallySchema, Status>>
 
 export interface JudgeMarkDefinition<Schema extends string> {
   /**
@@ -210,18 +216,32 @@ export interface ModelOptionNumber<Option extends string> extends ModelOptionBas
 
 export type ModelOption<Option extends string> = ModelOptionBoolean<Option> | ModelOptionEnum<Option> | ModelOptionNumber<Option> | ModelOptionString<Option>
 
-export interface BaseModel<Option extends string> {
+export type ModelStatusSeverity = 'success' | 'error' | 'warning' | 'neutral'
+
+export interface ModelStatusFormatted {
+  text: string
+  severity: ModelStatusSeverity
+}
+
+export interface ModelStatus<Status extends string> {
+  id: Status
+  name: string
+  formatter: (value: unknown) => ModelStatusFormatted
+}
+
+export interface BaseModel<Option extends string, Status extends string> {
   /**
    * Takes the form <rulebook-identifer>.<model-name>@<version>
    */
   id: `${string}.${string}@${string}`
   name: string
   options: Readonly<Array<ModelOption<Option>>>
+  statusDefinitions: Readonly<Array<ModelStatus<Status>>>
 }
 
 // TODO: optional panel configuration to be used for checks that all judges have scored
-export interface CompetitionEventModel<Option extends string = string, MarkSchema extends string = string, TallySchema extends string = string> extends BaseModel<Option> {
-  judges: Array<JudgeTypeGetter<Option, MarkSchema, TallySchema>>
+export interface CompetitionEventModel<Option extends string = string, Status extends string = string, MarkSchema extends string = string, TallySchema extends string = string, JudgeStatus extends string = string> extends BaseModel<Option, Status> {
+  judges: Array<JudgeTypeGetter<Option, MarkSchema, TallySchema, JudgeStatus>>
 
   previewTable: TableDefinitionGetter<Option>
   resultTable: TableDefinitionGetter<Option>
@@ -238,7 +258,7 @@ export interface CompetitionEventModel<Option extends string = string, MarkSchem
   rankEntries: (results: Readonly<Array<Readonly<EntryResult>>>, options: Options<Option>) => EntryResult[]
 }
 
-export interface OverallModel<Option extends string = string, CompetitionEventOption extends string = string> extends BaseModel<Option> {
+export interface OverallModel<Option extends string = string, CompetitionEventOption extends string = string, Status extends string = string> extends BaseModel<Option, Status> {
   competitionEventOptions: Readonly<Array<ModelOption<CompetitionEventOption>>>
   resultTable: TableDefinitionGetter<Option, CompetitionEventOption>
   rankOverall: (results: Readonly<Array<Readonly<EntryResult>>>, options: Options<Option>, competitionEventOptions: CompetitionEventsOptions<CompetitionEventOption>) => OverallResult[]

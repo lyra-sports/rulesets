@@ -37,6 +37,7 @@ export const difficultyJudge: JudgeTypeGetter<Option> = options => {
     name: 'Difficulty',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -97,6 +98,7 @@ export const presentationJudge: JudgeTypeGetter<Option> = options => {
     name: 'Presentation',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(reducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, reducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -204,6 +206,7 @@ export const requiredElementsJudge: JudgeTypeGetter<Option> = options => {
     name: 'Obligatoriska',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -258,6 +261,7 @@ export default {
   options: [
     { id: 'discipline', name: 'Discipline', type: 'enum', enum: ['sr', 'dd', 'wh', 'ts', 'xd'] },
   ],
+  statusDefinitions: [],
   judges: [difficultyJudge, presentationJudge, requiredElementsJudge],
 
   calculateEntry (meta, res, options) {

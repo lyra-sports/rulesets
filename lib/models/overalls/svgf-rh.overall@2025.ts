@@ -125,6 +125,7 @@ export default {
     { id: 'name', name: 'Name', type: 'string' },
     { id: 'rankMultiplier', name: 'Rank Multiplier', type: 'number' },
   ],
+  statusDefinitions: [],
   resultTable: overallTableFactory,
   rankOverall (results, options, competitionEventOptions) {
     const components: Partial<Record<CompetitionEventDefinition, readonly EntryResult[]>> = {}

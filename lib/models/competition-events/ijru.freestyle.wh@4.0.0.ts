@@ -6,6 +6,7 @@ export default {
   id: 'ijru.freestyle.wh@4.0.0',
   name: 'IJRU Wheel Freestyle v4.0.0',
   options: SR.options,
+  statusDefinitions: [],
   judges: [presentationJudge, technicalJudgeFactory({ discipline: 'wh' }), difficultyJudgeFactory('Da', 'Difficulty - Athlete A', { discipline: 'wh' }), difficultyJudgeFactory('Db', 'Difficulty - Athlete B', { discipline: 'wh' })],
 
   calculateEntry: calculateEntryFactory({ discipline: 'wh' }),

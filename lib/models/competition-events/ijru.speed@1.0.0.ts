@@ -4,6 +4,7 @@ import type { CompetitionEventModel, JudgeTypeGetter, TableDefinition } from '..
 import { ijruAverage } from '../../helpers/ijru.js'
 
 type Option = 'falseSwitches'
+type Status = 'withinThree'
 
 // deduc
 const SpeedDed = 10
@@ -24,6 +25,7 @@ export const speedJudge: JudgeTypeGetter< Option> = options => {
     name: 'Speed',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -72,6 +74,7 @@ export const speedHeadJudge: JudgeTypeGetter<Option> = options => {
     name: 'Speed Head Judge',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -114,6 +117,16 @@ export default {
   name: 'IJRU Speed v1.0.0',
   options: [
     { id: 'falseSwitches', name: 'False Switches', type: 'number' },
+  ],
+  statusDefinitions: [
+    {
+      id: 'withinThree',
+      name: 'Reskip allowed',
+      formatter: (value) => ({
+        text: value === false ? 'Yes' : 'No',
+        severity: value === false ? 'warning' : 'neutral',
+      }),
+    },
   ],
   judges: [speedJudge, speedHeadJudge],
 
@@ -172,4 +185,4 @@ export default {
 
   previewTable: options => speedPreviewTableHeaders,
   resultTable: options => speedResultTableHeaders,
-} satisfies CompetitionEventModel<Option>
+} satisfies CompetitionEventModel<Option, Status>

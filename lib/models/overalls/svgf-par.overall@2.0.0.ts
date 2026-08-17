@@ -100,6 +100,7 @@ export default {
     { id: 'resultMultiplier', name: 'Result Multiplier', type: 'number' },
     { id: 'normalisationMultiplier', name: 'Normalisation Multiplier', type: 'number' },
   ],
+  statusDefinitions: [],
   resultTable: overallTableFactory,
   rankOverall (results, options, competitionEventOptions) {
     const components: Partial<Record<CompetitionEventDefinition, readonly EntryResult[]>> = {}

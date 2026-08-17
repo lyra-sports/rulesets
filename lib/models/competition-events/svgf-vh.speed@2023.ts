@@ -25,6 +25,7 @@ export const speedJudge: JudgeTypeGetter<Option> = options => {
     name: 'Speed',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -62,6 +63,7 @@ export default {
   id: 'svgf-vh.speed@2023',
   name: 'SvGF Vikingahoppet Speed 2023',
   options: [],
+  statusDefinitions: [],
   judges: [speedJudge],
 
   calculateEntry (meta, res, options) {
