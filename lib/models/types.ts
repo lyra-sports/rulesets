@@ -117,7 +117,7 @@ export interface GenericMark<Schema extends string> extends MarkBase<Schema> {
    */
   readonly value?: number
 }
-export function isGenericMark (x: unknown): x is GenericMark<string> { return isObject(x) && x.timestamp === 'numer' && x.sequence === 'number' && x.schema === 'string' }
+export function isGenericMark (x: unknown): x is GenericMark<string> { return isObject(x) && typeof x.timestamp === 'number' && typeof x.sequence === 'number' && typeof x.schema === 'string' }
 
 /**
  * A clear mark tells the model to ignore any previous marks.

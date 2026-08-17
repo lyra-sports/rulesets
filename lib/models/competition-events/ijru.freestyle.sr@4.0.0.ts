@@ -435,7 +435,7 @@ export const technicalJudgeFactory = ({ discipline }: { discipline: 'sr' | 'wh' 
 
           ...(isSR && hasInteractions
             ? {
-                aqI: clampNumber(maxRq.rqInteractions - (scsh.tally.rqInteractions ?? 0), { min: 0 }),
+                aqI: clampNumber(maxRq.rqInteractions - (tally.rqInteractions ?? 0), { min: 0 }),
               }
             : {}
           ),
