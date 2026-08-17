@@ -299,7 +299,7 @@ export const difficultyJudge: JudgeTypeGetter<Option> = options => {
       if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
       const tally = normaliseTally(fieldDefinitions, scsh.tally)
 
-      const D = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * L(levels[f.schema])).reduce((a, b) => a + b)
+      const D = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * L(levels[f.schema] ?? 0)).reduce((a, b) => a + b)
       return {
         meta: scsh.meta,
         result: {
@@ -368,17 +368,17 @@ export default {
       if (scoreType === 'aM' && noMusic) raw[scoreType] = 0
     }
 
-    raw.m = (Fm1 * clampNumber(raw.m, { max: 1 })) +
-      (Fm2 * clampNumber(raw.m - 1, { min: 0, max: 1 })) +
-      (Fm * clampNumber(raw.m - 2, { min: 0 }))
-    raw.v = Fd * raw.v
+    raw.m = (Fm1 * clampNumber(raw.m ?? 0, { max: 1 })) +
+      (Fm2 * clampNumber((raw.m ?? 0) - 1, { min: 0, max: 1 })) +
+      (Fm * clampNumber((raw.m ?? 0) - 2, { min: 0 }))
+    raw.v = Fd * (raw.v ?? 0)
 
     raw.M = roundTo(1 - (raw.m + raw.v), 2)
     raw.M = raw.M < 0 ? 0 : raw.M
 
-    raw.P = roundTo(1 + (raw.aE + raw.aF + raw.aM), 2)
+    raw.P = roundTo(1 + ((raw.aE ?? 0) + (raw.aF ?? 0) + (raw.aM ?? 0)), 2)
 
-    raw.R = roundTo(raw.D * raw.P * raw.M * raw.Q, 2)
+    raw.R = roundTo((raw.D ?? 0) * raw.P * raw.M * (raw.Q ?? 1), 2)
     raw.R = raw.R < 0 ? 0 : raw.R
 
     return {
@@ -399,8 +399,8 @@ export default {
       return 0
     })
 
-    const high = results.length > 0 ? results[0].result.R ?? 0 : 0
-    const low = results.length > 1 ? results[results.length - 1].result.R ?? 0 : 0
+    const high = results[0]?.result.R ?? 0
+    const low = results.length > 1 ? results[results.length - 1]?.result.R ?? 0 : 0
 
     results = results.map((el, idx, arr) => ({
       ...el,

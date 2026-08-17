@@ -43,7 +43,7 @@ export const difficultyJudge: JudgeTypeGetter<Option> = options => {
     calculateJudgeResult: scsh => {
       if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
       const tally = normaliseTally(fieldDefinitions, scsh.tally)
-      const D = fieldDefinitions.map(f => (tally[f.schema] ?? 0) * L(levels[f.schema])).reduce((a, b) => a + b)
+      const D = fieldDefinitions.map(f => (tally[f.schema] ?? 0) * L(levels[f.schema] ?? 0)).reduce((a, b) => a + b)
       return {
         meta: scsh.meta,
         result: {

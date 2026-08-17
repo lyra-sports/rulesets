@@ -47,8 +47,9 @@ export const overallTableFactory: TableDefinitionGetter<Option, CompetitionEvent
   const evtGroup: TableHeaderGroup[] = []
 
   for (const cEvt of [...srEvts, ...ddEvts]) {
+    const name = cEvtOptions[cEvt]?.name
     evtGroup.push({
-      text: typeof cEvtOptions[cEvt].name === 'string' ? (cEvtOptions[cEvt].name).replace(/^(Wheel|Single Rope) /, '') : cEvt.split('.')[4] ?? '',
+      text: typeof name === 'string' ? name.replace(/^(Wheel|Single Rope) /, '') : cEvt.split('.')[4] ?? '',
       key: cEvt,
       colspan: 2,
     })

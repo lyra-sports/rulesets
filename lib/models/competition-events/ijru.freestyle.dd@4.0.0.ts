@@ -340,8 +340,8 @@ export default {
       return 0
     })
 
-    const high = results.length > 0 ? results[0].result.R ?? 0 : 0
-    const low = results.length > 1 ? results[results.length - 1].result.R ?? 0 : 0
+    const high = results[0]?.result.R ?? 0
+    const low = results.length > 1 ? results[results.length - 1]?.result.R ?? 0 : 0
 
     results = results.map((el, idx, arr) => ({
       ...el,

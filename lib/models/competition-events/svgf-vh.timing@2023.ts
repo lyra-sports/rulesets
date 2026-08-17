@@ -30,8 +30,8 @@ export const timingJudge: JudgeTypeGetter<Option, MarkSchema, TallySchema> = opt
     if (mark.schema === 'pause') {
       let lastStartMark: GenericMark<MarkSchema> | undefined
       for (let idx = marks.length - 1; idx >= 0; idx--) {
-        if (marks[idx].schema === 'pause') break
-        else if (marks[idx].schema === 'start') lastStartMark = marks[idx]
+        if (marks[idx]?.schema === 'pause') break
+        else if (marks[idx]?.schema === 'start') lastStartMark = marks[idx]
       }
       if (lastStartMark != null) {
         tally.seconds += Math.round((mark.timestamp - lastStartMark.timestamp) / 1000)

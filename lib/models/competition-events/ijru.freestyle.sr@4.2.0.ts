@@ -55,7 +55,7 @@ export const difficultyJudgeFactory: (id: string, name: string, opts: { discipli
     calculateJudgeResult: scsh => {
       if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
       const tally = normaliseTally(fieldDefinitions, scsh.tally)
-      const d = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * ijruFreestyleSr400.L(levels[f.schema])).reduce((a, b) => a + b, 0)
+      const d = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * ijruFreestyleSr400.L(levels[f.schema] ?? 0)).reduce((a, b) => a + b, 0)
 
       const rqType = id.charAt(1).toLocaleUpperCase()
       let numRqType = 6
@@ -73,7 +73,7 @@ export const difficultyJudgeFactory: (id: string, name: string, opts: { discipli
 
       const rqCount = { full: 0, partial: 0 }
       for (const field of fieldDefinitions.filter(f => f.schema !== 'rep')) {
-        rqCount[levels[field.schema] < (options.rqFullCreditThresholdLevel as number | undefined ?? 3) ? 'partial' : 'full'] += tally[field.schema] ?? 0
+        rqCount[(levels[field.schema] ?? 0) < (options.rqFullCreditThresholdLevel as number | undefined ?? 3) ? 'partial' : 'full'] += tally[field.schema] ?? 0
       }
       let rq = numRqType
 

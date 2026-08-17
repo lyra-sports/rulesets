@@ -60,4 +60,4 @@ export default {
   overallModels: [
     svgfVhOverall2023,
   ],
-} as Ruleset
+} satisfies Ruleset
