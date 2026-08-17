@@ -386,6 +386,26 @@ void test('ijru.freestyle.sr@4.0.0', async t => {
       ]
       assert.throws(() => mod.default.calculateEntry(eMeta, scores, options), RSRMissingJudgeResultError)
     })
+
+    await t.test('throws when the presentation judge has no results', () => {
+      const scores: JudgeResult[] = [
+        { meta: jMeta('21', 'T'), result: { nb: 4, nm: 3, nv: 4 }, statuses: {} },
+        { meta: jMeta('31', 'Dm'), result: { d: 10.5, aqM: 1 }, statuses: {} },
+        { meta: jMeta('32', 'Dp'), result: { d: 31.22, aqP: 0 }, statuses: {} },
+        { meta: jMeta('33', 'Dr'), result: { d: 35, aqR: 2 }, statuses: {} },
+      ]
+      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), new RSRMissingJudgeResultError('P'))
+    })
+
+    await t.test('throws when the technical judge has no results', () => {
+      const scores: JudgeResult[] = [
+        { meta: jMeta('1', 'P'), result: { p: 20, nm: 2 }, statuses: {} },
+        { meta: jMeta('31', 'Dm'), result: { d: 10.5, aqM: 1 }, statuses: {} },
+        { meta: jMeta('32', 'Dp'), result: { d: 31.22, aqP: 0 }, statuses: {} },
+        { meta: jMeta('33', 'Dr'), result: { d: 35, aqR: 2 }, statuses: {} },
+      ]
+      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), new RSRMissingJudgeResultError('T'))
+    })
   })
 
   await t.test('rankEntries', async t => {

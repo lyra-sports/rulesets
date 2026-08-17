@@ -22,6 +22,15 @@ function entryResult (participantId: string, competitionEvent: CompetitionEventD
 }
 
 void test('svgf-vh.overall@2023', async t => {
+  await t.test('resultTable', () => {
+    const table = model.resultTable({}, {
+      [srif]: { name: 'Single Rope Some Event' },
+      [srss]: {},
+    })
+    assert.ok((table.groups ?? []).length > 0)
+    assert.ok(table.headers.length > 0)
+  })
+
   await t.test('rankOverall', async t => {
     await t.test('ranks by rank sum, sharing tied ranks', () => {
       const results = [

@@ -22,6 +22,15 @@ function entryResult (participantId: string, competitionEvent: CompetitionEventD
 }
 
 void test('svgf-par.overall@2.0.0', async t => {
+  await t.test('resultTable', () => {
+    const table = model.resultTable({}, {
+      [srpf]: { name: 'Single Rope Some Event' },
+      [srdr]: {},
+    })
+    assert.ok((table.groups ?? []).length > 0)
+    assert.ok(table.headers.length > 0)
+  })
+
   await t.test('rankOverall', async t => {
     await t.test('ranks by rank sum, tie broken by normalised score', () => {
       const results = [

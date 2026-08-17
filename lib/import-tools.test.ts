@@ -25,6 +25,9 @@ void test('import-tools', async t => {
       assert.strictEqual(model.id, 'ijru.overall@1.0.0')
       assert.strictEqual(typeof model.rankOverall, 'function')
     })
+    await t.test('throws TypeError on an invalid id', async () => {
+      await assert.rejects(importOverallModel('not@@valid'), TypeError)
+    })
     await t.test('throws RSUnsupported on an unknown id', async () => {
       await assert.rejects(importOverallModel('ijru.overall@0.0.1'), RSUnsupported)
     })
@@ -49,6 +52,9 @@ void test('import-tools', async t => {
       const overall = await importPreconfiguredOverall('e.ijru.oa.sr.isro.1.0@4.0.0')
       assert.strictEqual(overall.id, 'e.ijru.oa.sr.isro.1.0@4.0.0')
       assert.strictEqual(overall.modelId, 'ijru.overall@1.0.0')
+    })
+    await t.test('throws TypeError on an invalid id', async () => {
+      await assert.rejects(importPreconfiguredOverall('isro@4.0.0'), TypeError)
     })
     await t.test('throws RSUnsupported on an unknown id', async () => {
       await assert.rejects(importPreconfiguredOverall('e.ijru.oa.sr.isro.1.0@0.0.1'), RSUnsupported)
