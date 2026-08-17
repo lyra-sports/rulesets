@@ -354,21 +354,16 @@ export default {
 
     const raw: Record<string, number> = {}
 
-    const scoreTypeJudges = { D: 'D', aF: 'Pa', aE: 'Pr', aM: 'Pr', m: 'Pa', v: 'R', Q: 'R' } as const
+    const scoreTypeJudges = { D: 'D', aF: 'Pa', aE: 'Pr', aM: 'Pr', m: 'Pa', v: 'R', Q: 'R', U: 'R' } as const
 
     for (const scoreType of ['D', 'aF', 'aE', 'aM', 'm', 'v', 'Q', 'U'] as const) {
       const scores = results.map(el => el.result[scoreType]).filter(el => typeof el === 'number')
       const score = ijruAverage(scores)
-
-      if (scoreType === 'U') {
-        raw[scoreType] = score == null ? 0 : roundTo(score, 2)
-        continue
-      }
       if (score == null) throw new RSRMissingJudgeResultError(scoreTypeJudges[scoreType])
 
       if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(score, 4)
       else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(score, 6)
-      else raw[scoreType] = roundTo(score, 2) // D, Q
+      else raw[scoreType] = roundTo(score, 2) // D, Q, U
     }
 
     raw.M = roundTo(-(1 - (raw.m ?? 0) - (raw.v ?? 0)), 2) // the minus is because they're already prepped to 1- and that needs to be reversed
