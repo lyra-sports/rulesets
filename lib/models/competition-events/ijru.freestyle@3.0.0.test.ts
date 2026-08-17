@@ -2,7 +2,7 @@ import assert from 'node:assert'
 import test from 'node:test'
 import * as mod from './ijru.freestyle@3.0.0.js'
 import { ijruAverage } from '../../helpers/ijru.js'
-import { type JudgeResult, type EntryMeta, type JudgeMeta } from '../types.js'
+import { type JudgeResult, type EntryMeta, type EntryResult, type JudgeMeta } from '../types.js'
 import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
 
 void test('ijru.freestyle@3.0.0', async t => {
@@ -465,6 +465,38 @@ void test('ijru.freestyle@3.0.0', async t => {
         { meta: jMeta('21', 'R'), result: { Q: 0.925, m: 0.95, v: 0.925 }, statuses: {} },
       ]
       assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), RSRMissingJudgeResultError)
+    })
+  })
+
+  await t.test('rankEntries', async t => {
+    const rMeta = (id: string): EntryMeta => ({
+      entryId: id,
+      participantId: id,
+      competitionEvent: 'e.ijru.fs.sr.srif.1.75@3.0.0',
+    })
+
+    await t.test('ranks and normalises', () => {
+      const scores: EntryResult[] = [
+        { meta: rMeta('1'), result: { D: 20, P: 1.1, Q: 1, M: 1, R: 22 }, statuses: {} },
+        { meta: rMeta('2'), result: { D: 30, P: 1.1, Q: 1, M: 1, R: 33 }, statuses: {} },
+      ]
+      const result = mod.default.rankEntries(scores, {})
+      assert.deepStrictEqual(result.map(el => ({ entryId: el.meta.entryId, S: el.result.S, N: el.result.N })), [
+        { entryId: '2', S: 1, N: 100 },
+        { entryId: '1', S: 2, N: 1 },
+      ])
+    })
+
+    await t.test('when the whole field ties every entry keeps the minimum normalised score', () => {
+      const scores: EntryResult[] = [
+        { meta: rMeta('1'), result: { D: 20, P: 1.1, Q: 1, M: 1, R: 22 }, statuses: {} },
+        { meta: rMeta('2'), result: { D: 20, P: 1.1, Q: 1, M: 1, R: 22 }, statuses: {} },
+      ]
+      const result = mod.default.rankEntries(scores, {})
+      assert.deepStrictEqual(result.map(el => ({ entryId: el.meta.entryId, S: el.result.S, N: el.result.N })), [
+        { entryId: '1', S: 1, N: 1 },
+        { entryId: '2', S: 1, N: 1 },
+      ])
     })
   })
 })

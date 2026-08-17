@@ -413,7 +413,7 @@ export default {
         score.result.P === el.result.P &&
         score.result.D === el.result.D
         ) + 1,
-        N: high === low ? 100 : roundTo((((100 - 1) * ((el.result.R ?? 0) - low)) / (high - low)) + 1, 2),
+        N: roundTo((((100 - 1) * ((el.result.R ?? 0) - low)) / ((high - low) !== 0 ? high - low : 1)) + 1, 2),
       },
     }))
 

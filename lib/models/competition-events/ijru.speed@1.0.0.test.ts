@@ -323,7 +323,7 @@ void test('ijru.speed@3.0.0', async t => {
       ])
     })
 
-    await t.test('when the whole field ties every entry normalises to 100', () => {
+    await t.test('when the whole field ties every entry keeps the minimum normalised score', () => {
       const options = { falseSwitches: 3 }
       const scores: EntryResult[] = [
         {
@@ -341,12 +341,12 @@ void test('ijru.speed@3.0.0', async t => {
       assert.deepStrictEqual(result, [
         {
           meta: meta('1'),
-          result: { a: 10, m: 0, R: 10, S: 1, N: 100 },
+          result: { a: 10, m: 0, R: 10, S: 1, N: 1 },
           statuses: { withinThree: true },
         },
         {
           meta: meta('2'),
-          result: { a: 10, m: 0, R: 10, S: 1, N: 100 },
+          result: { a: 10, m: 0, R: 10, S: 1, N: 1 },
           statuses: { withinThree: true },
         },
       ])

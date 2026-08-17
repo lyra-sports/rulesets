@@ -427,15 +427,15 @@ void test('ijru.freestyle.sr@4.0.0', async t => {
       ])
     })
 
-    await t.test('when the whole field ties every entry normalises to 100', () => {
+    await t.test('when the whole field ties every entry keeps the minimum normalised score', () => {
       const scores: EntryResult[] = [
         { meta: rMeta('1'), result: { D: 20, P: 0.5, Q: 1, M: 1, R: 45 }, statuses: {} },
         { meta: rMeta('2'), result: { D: 20, P: 0.5, Q: 1, M: 1, R: 45 }, statuses: {} },
       ]
       const result = mod.default.rankEntries(scores, {})
       assert.deepStrictEqual(result.map(el => ({ entryId: el.meta.entryId, S: el.result.S, N: el.result.N })), [
-        { entryId: '1', S: 1, N: 100 },
-        { entryId: '2', S: 1, N: 100 },
+        { entryId: '1', S: 1, N: 1 },
+        { entryId: '2', S: 1, N: 1 },
       ])
     })
   })
