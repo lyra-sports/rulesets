@@ -9,7 +9,7 @@ const rulesetRegex = /^[a-z0-9-]+@(?<version>[a-z0-9-.]+)$/
 
 function unwrapDefault<T> (mod: { default: T | { default: T } }): T {
   const def = mod.default
-  return def != null && typeof def === 'object' && 'default' in def ? (def as { default: T }).default : (def as T)
+  return def != null && typeof def === 'object' && 'default' in def ? (def as { default: T }).default : def
 }
 
 function isModuleNotFoundError (err: unknown): boolean {
@@ -19,7 +19,8 @@ function isModuleNotFoundError (err: unknown): boolean {
 export async function importCompetitionEventModel (modelId: string): Promise<CompetitionEventModel> {
   if (!modelRegex.test(modelId)) throw new TypeError('Invalid modelId provided must be in the form of <model id>@<version>')
   try {
-    return unwrapDefault<CompetitionEventModel>(await import(`./models/competition-events/${modelId}.js`))
+    const mod: { default: CompetitionEventModel | { default: CompetitionEventModel } } = await import(`./models/competition-events/${modelId}.js`)
+    return unwrapDefault(mod)
   } catch (err) {
     if (!isModuleNotFoundError(err)) throw err
     throw new RSUnsupported('competition-event-model', modelId)
@@ -28,7 +29,8 @@ export async function importCompetitionEventModel (modelId: string): Promise<Com
 export async function importOverallModel (modelId: string): Promise<OverallModel> {
   if (!modelRegex.test(modelId)) throw new TypeError('Invalid modelId provided must be in the form of <model id>@<version>')
   try {
-    return unwrapDefault<OverallModel>(await import(`./models/overalls/${modelId}.js`))
+    const mod: { default: OverallModel | { default: OverallModel } } = await import(`./models/overalls/${modelId}.js`)
+    return unwrapDefault(mod)
   } catch (err) {
     if (!isModuleNotFoundError(err)) throw err
     throw new RSUnsupported('overall-model', modelId)
@@ -39,7 +41,8 @@ export async function importPreconfiguredCompetitionEvent (competitionEvent: str
   const match = evtDefRegex.exec(competitionEvent)
   if (match?.groups?.org == null || match.groups?.version == null) throw new TypeError('Invalid competitionEvent provided must be in the form of <event definition lookup code>@<version>')
   try {
-    return unwrapDefault<CompetitionEvent>(await import(`./preconfigured/competition-events/${match.groups.org}/${match.groups.version}/${competitionEvent}.js`))
+    const mod: { default: CompetitionEvent | { default: CompetitionEvent } } = await import(`./preconfigured/competition-events/${match.groups.org}/${match.groups.version}/${competitionEvent}.js`)
+    return unwrapDefault(mod)
   } catch (err) {
     if (!isModuleNotFoundError(err)) throw err
     throw new RSUnsupported('competition-event-preconfigured', competitionEvent)
@@ -49,7 +52,8 @@ export async function importPreconfiguredOverall (competitionEvent: string): Pro
   const match = evtDefRegex.exec(competitionEvent)
   if (match?.groups?.org == null || match.groups?.version == null) throw new TypeError('Invalid competitionEvent provided must be in the form of <event definition lookup code>@<version>')
   try {
-    return unwrapDefault<Overall>(await import(`./preconfigured/overalls/${match.groups.org}/${match.groups.version}/${competitionEvent}.js`))
+    const mod: { default: Overall | { default: Overall } } = await import(`./preconfigured/overalls/${match.groups.org}/${match.groups.version}/${competitionEvent}.js`)
+    return unwrapDefault(mod)
   } catch (err) {
     if (!isModuleNotFoundError(err)) throw err
     throw new RSUnsupported('overall-preconfigured', competitionEvent)
@@ -59,7 +63,8 @@ export async function importPreconfiguredOverall (competitionEvent: string): Pro
 export async function importRuleset (rulesetId: string): Promise<Ruleset> {
   if (!rulesetRegex.test(rulesetId)) throw new TypeError('Invalid rulesetId provided must be in the form of <ruleset id>@<version>')
   try {
-    return unwrapDefault<Ruleset>(await import(`./rulesets/${rulesetId}.js`))
+    const mod: { default: Ruleset | { default: Ruleset } } = await import(`./rulesets/${rulesetId}.js`)
+    return unwrapDefault(mod)
   } catch (err) {
     if (!isModuleNotFoundError(err)) throw err
     throw new RSUnsupported('ruleset', rulesetId)
