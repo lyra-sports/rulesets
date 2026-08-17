@@ -27,6 +27,19 @@ void test('svgf-rh.freestyle@2020', async t => {
       })
     })
 
+    await t.test('calculates a judge result (DD)', () => {
+      const judge = mod.presentationJudge({ discipline: 'dd' })
+      const result = judge.calculateJudgeResult({
+        meta,
+        tally: { musicOnBeat: 8, interactions: 5, movement: 7, formExecution: 6, impression: 9, miss: 4 },
+      })
+      assert.deepStrictEqual(result, {
+        meta,
+        result: { P: 39 },
+        statuses: {},
+      })
+    })
+
     await t.test('throws on incorrect meta.judgeTypeId', () => {
       const judge = mod.presentationJudge({})
       assert.throws(
