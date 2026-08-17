@@ -1,7 +1,7 @@
 import assert from 'node:assert'
 import test from 'node:test'
 import * as mod from './ijru.freestyle.sr@4.0.0.js'
-import { type JudgeResult, type EntryMeta, type JudgeMeta } from '../types.js'
+import { type JudgeResult, type EntryMeta, type EntryResult, type JudgeMeta } from '../types.js'
 import { RSRWrongJudgeTypeError } from '../../errors.js'
 import { markGeneratorFactory } from '../../helpers/helpers.test.js'
 
@@ -374,6 +374,38 @@ void test('ijru.freestyle.sr@4.0.0', async t => {
         },
         statuses: {},
       })
+    })
+  })
+
+  await t.test('rankEntries', async t => {
+    const rMeta = (id: string): EntryMeta => ({
+      entryId: id,
+      participantId: id,
+      competitionEvent: 'e.ijru.fs.sr.srif.1.75@4.0.0',
+    })
+
+    await t.test('ranks and normalises', () => {
+      const scores: EntryResult[] = [
+        { meta: rMeta('1'), result: { D: 20, P: 0.5, Q: 1, M: 1, R: 45 }, statuses: {} },
+        { meta: rMeta('2'), result: { D: 25, P: 0.6, Q: 1, M: 1, R: 65 }, statuses: {} },
+      ]
+      const result = mod.default.rankEntries(scores, {})
+      assert.deepStrictEqual(result.map(el => ({ entryId: el.meta.entryId, S: el.result.S, N: el.result.N })), [
+        { entryId: '2', S: 1, N: 100 },
+        { entryId: '1', S: 2, N: 1 },
+      ])
+    })
+
+    await t.test('when the whole field ties every entry normalises to 100', () => {
+      const scores: EntryResult[] = [
+        { meta: rMeta('1'), result: { D: 20, P: 0.5, Q: 1, M: 1, R: 45 }, statuses: {} },
+        { meta: rMeta('2'), result: { D: 20, P: 0.5, Q: 1, M: 1, R: 45 }, statuses: {} },
+      ]
+      const result = mod.default.rankEntries(scores, {})
+      assert.deepStrictEqual(result.map(el => ({ entryId: el.meta.entryId, S: el.result.S, N: el.result.N })), [
+        { entryId: '1', S: 1, N: 100 },
+        { entryId: '2', S: 1, N: 100 },
+      ])
     })
   })
 })
