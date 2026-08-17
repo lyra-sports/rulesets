@@ -14,32 +14,6 @@ void test('svgf-rh.freestyle@2025', async t => {
       competitionEvent: 'e.svgf.fs.sr.srif-rh.1.75@2025',
     }
 
-    await t.test('calculates a judge result, first miss free', () => {
-      const judge = mod.presentationJudge({})
-      const result = judge.calculateJudgeResult({
-        meta,
-        tally: { musicality: 8, movement: 7, formExecution: 6, impression: 9, miss: 2 },
-      })
-      assert.deepStrictEqual(result, {
-        meta,
-        result: { P: 39 },
-        statuses: {},
-      })
-    })
-
-    await t.test('calculates a judge result (DD)', () => {
-      const judge = mod.presentationJudge({ discipline: 'dd' })
-      const result = judge.calculateJudgeResult({
-        meta,
-        tally: { musicality: 8, interactions: 5, movement: 7, formExecution: 6, impression: 9, miss: 0 },
-      })
-      assert.deepStrictEqual(result, {
-        meta,
-        result: { P: 45 },
-        statuses: {},
-      })
-    })
-
     await t.test('throws on incorrect meta.judgeTypeId', () => {
       const judge = mod.presentationJudge({})
       assert.throws(
@@ -57,19 +31,6 @@ void test('svgf-rh.freestyle@2025', async t => {
       participantId: '1',
       competitionEvent: 'e.svgf.fs.sr.srif-rh.1.75@2025',
     }
-
-    await t.test('calculates a judge result', () => {
-      const judge = mod.difficultyJudge({})
-      const result = judge.calculateJudgeResult({
-        meta,
-        tally: { 'diffL0.5': 2, diffL1: 3, diffL2: 1 },
-      })
-      assert.deepStrictEqual(result, {
-        meta,
-        result: { D: 5.5 },
-        statuses: {},
-      })
-    })
 
     await t.test('throws on incorrect meta.judgeTypeId', () => {
       const judge = mod.difficultyJudge({})

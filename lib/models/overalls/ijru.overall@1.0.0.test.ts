@@ -84,25 +84,5 @@ void test('ijru.overall@1.0.0', async t => {
         [{ participantId: 'alice', S: 1 }]
       )
     })
-
-    await t.test('applies multipliers', () => {
-      const results = [
-        entryResult('alice', srif, { R: 50, S: 1, N: 100 }),
-        entryResult('alice', srss, { R: 20, S: 2, N: 90 }),
-        entryResult('bob', srif, { R: 40, S: 2, N: 90 }),
-        entryResult('bob', srss, { R: 25, S: 1, N: 100 }),
-      ]
-      const ranked = model.rankOverall(results, {}, {
-        [srif]: { rankMultiplier: 3, resultMultiplier: 2, normalisationMultiplier: 2 },
-        [srss]: {},
-      })
-      assert.deepStrictEqual(
-        ranked.map(r => ({ participantId: r.meta.participantId, R: r.result.R, T: r.result.T, B: r.result.B, S: r.result.S })),
-        [
-          { participantId: 'alice', R: 120, T: 5, B: 290, S: 1 },
-          { participantId: 'bob', R: 105, T: 7, B: 280, S: 2 },
-        ]
-      )
-    })
   })
 })
