@@ -41,19 +41,19 @@ export interface RulesetInfo {
 }
 
 export async function listCompetitionEventModels () {
-  return (await import('../data/competition-event-models.json', { assert: { type: 'json' } })).default
+  return (await import('../data/competition-event-models.json', { with: { type: 'json' } })).default
 }
 export async function listOverallModels () {
-  return (await import('../data/overall-models.json', { assert: { type: 'json' } })).default
+  return (await import('../data/overall-models.json', { with: { type: 'json' } })).default
 }
 
 export async function listPreconfiguredCompetitionEvents () {
-  return (await import('../data/competition-events.json', { assert: { type: 'json' } })).default
+  return (await import('../data/competition-events.json', { with: { type: 'json' } })).default
 }
 export async function listPreconfiguredOveralls () {
-  return (await import('../data/overalls.json', { assert: { type: 'json' } })).default
+  return (await import('../data/overalls.json', { with: { type: 'json' } })).default
 }
 
 export async function listRulesets () {
-  return (await import('../data/rulesets.json', { assert: { type: 'json' } })).default
+  return (await import('../data/rulesets.json', { with: { type: 'json' } })).default
 }

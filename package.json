@@ -52,6 +52,9 @@
     }
   },
   "sideEffects": false,
+  "engines": {
+    "node": ">=20.10"
+  },
   "files": [
     "dist/"
   ],
