@@ -66,6 +66,7 @@
     "pretypecheck": "npm run build:data",
     "typecheck": "tsc --project tsconfig.eslint.json --noEmit",
     "build": "npm run build:data && npm run build:code",
+    "postbuild": "tsx bin/postbuild.ts",
     "build:code": "tsc -b",
     "build:data": "tsx bin/generate-lists.ts",
     "prepack": "npm run build"
