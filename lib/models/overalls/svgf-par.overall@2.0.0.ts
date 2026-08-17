@@ -151,7 +151,7 @@ export default {
     })
 
     for (const result of ranked) {
-      result.result.S = ranked.findIndex(obj => obj.result.B === result.result.B) + 1
+      result.result.S = ranked.findIndex(obj => obj.result.T === result.result.T && obj.result.B === result.result.B) + 1
     }
 
     return ranked
