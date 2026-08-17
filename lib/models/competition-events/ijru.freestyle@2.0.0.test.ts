@@ -2,7 +2,6 @@ import assert from 'node:assert'
 import test from 'node:test'
 import * as mod from './ijru.freestyle@2.0.0.js'
 import { type JudgeResult, type EntryMeta, type EntryResult, type JudgeMeta } from '../types.js'
-import { RSRMissingJudgeResultError } from '../../errors.js'
 
 void test('ijru.freestyle@2.0.0', async t => {
   await t.test('L', async t => {
@@ -70,13 +69,13 @@ void test('ijru.freestyle@2.0.0', async t => {
       })
     })
 
-    await t.test('throws when a judge type has no results', () => {
+    await t.test('returns undefined when a judge type has no results', () => {
       const scores: JudgeResult[] = [
         { meta: jMeta('1', 'Pr'), result: { aE: 0.1125, aM: -0.064286 }, statuses: {} },
         { meta: jMeta('11', 'Pa'), result: { aF: 1.12, m: 0.95 }, statuses: {} },
         { meta: jMeta('21', 'R'), result: { Q: 0.925, m: 0.95, v: 0.925, U: 1.822 }, statuses: {} },
       ]
-      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), RSRMissingJudgeResultError)
+      assert.strictEqual(mod.default.calculateEntry(eMeta, scores, {}), undefined)
     })
   })
 

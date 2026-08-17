@@ -3,7 +3,7 @@ import test from 'node:test'
 import * as mod from './ijru.freestyle.dd@4.0.0.js'
 import * as srMod from './ijru.freestyle.sr@4.0.0.js'
 import { type JudgeResult, type EntryMeta, type EntryResult, type JudgeMeta } from '../types.js'
-import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRWrongJudgeTypeError } from '../../errors.js'
 import { markGeneratorFactory } from '../../helpers/helpers.test.js'
 
 void test('ijru.freestyle.dd@4.0.0', async t => {
@@ -350,31 +350,31 @@ void test('ijru.freestyle.dd@4.0.0', async t => {
       })
     })
 
-    await t.test('throws when a judge type has no results', () => {
+    await t.test('returns undefined when a judge type has no results', () => {
       const scores: JudgeResult[] = [
         { meta: jMeta('1', 'P'), result: { p: 20, nm: 2 }, statuses: {} },
         { meta: jMeta('21', 'T'), result: { nm: 3, nv: 4 }, statuses: {} },
         { meta: jMeta('31', 'Dj'), result: { d: 8.5 }, statuses: {} },
       ]
-      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), RSRMissingJudgeResultError)
+      assert.strictEqual(mod.default.calculateEntry(eMeta, scores, {}), undefined)
     })
 
-    await t.test('throws when the presentation judge has no results', () => {
+    await t.test('returns undefined when the presentation judge has no results', () => {
       const scores: JudgeResult[] = [
         { meta: jMeta('21', 'T'), result: { nm: 3, nv: 4 }, statuses: {} },
         { meta: jMeta('31', 'Dj'), result: { d: 8.5 }, statuses: {} },
         { meta: jMeta('41', 'Dt'), result: { d: 4.7 }, statuses: {} },
       ]
-      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), new RSRMissingJudgeResultError('P'))
+      assert.strictEqual(mod.default.calculateEntry(eMeta, scores, {}), undefined)
     })
 
-    await t.test('throws when the technical judge has no results', () => {
+    await t.test('returns undefined when the technical judge has no results', () => {
       const scores: JudgeResult[] = [
         { meta: jMeta('1', 'P'), result: { p: 20, nm: 2 }, statuses: {} },
         { meta: jMeta('31', 'Dj'), result: { d: 8.5 }, statuses: {} },
         { meta: jMeta('41', 'Dt'), result: { d: 4.7 }, statuses: {} },
       ]
-      assert.throws(() => mod.default.calculateEntry(eMeta, scores, {}), new RSRMissingJudgeResultError('T'))
+      assert.strictEqual(mod.default.calculateEntry(eMeta, scores, {}), undefined)
     })
   })
 

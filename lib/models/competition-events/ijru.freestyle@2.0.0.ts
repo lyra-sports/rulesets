@@ -1,4 +1,4 @@
-import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRWrongJudgeTypeError } from '../../errors.js'
 import { normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers.js'
 import { type JudgeTypeGetter, type JudgeTallyFieldDefinition, type TableDefinition, type CompetitionEventModel } from '../types.js'
 import { ijruAverage } from '../../helpers/ijru.js'
@@ -354,12 +354,10 @@ export default {
 
     const raw: Record<string, number> = {}
 
-    const scoreTypeJudges = { D: 'D', aF: 'Pa', aE: 'Pr', aM: 'Pr', m: 'Pa', v: 'R', Q: 'R', U: 'R' } as const
-
     for (const scoreType of ['D', 'aF', 'aE', 'aM', 'm', 'v', 'Q', 'U'] as const) {
       const scores = results.map(el => el.result[scoreType]).filter(el => typeof el === 'number')
       const score = ijruAverage(scores)
-      if (score == null) throw new RSRMissingJudgeResultError(scoreTypeJudges[scoreType])
+      if (score == null) return
 
       if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(score, 4)
       else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(score, 6)

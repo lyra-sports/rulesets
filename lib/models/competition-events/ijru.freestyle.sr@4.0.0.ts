@@ -1,4 +1,4 @@
-import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRWrongJudgeTypeError } from '../../errors.js'
 import type { MarkReducer } from '../../helpers/helpers.js'
 import { clampNumber, filterMarkStream, normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers.js'
 import type { CompetitionEventModel, JudgeTypeGetter, Options, TableDefinition } from '../types.js'
@@ -591,7 +591,7 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
         .map(el => el.result.d)
         .filter(el => typeof el === 'number')
       const dScore = ijruAverage(dScores)
-      if (dScore == null) throw new RSRMissingJudgeResultError(judgeTypeId)
+      if (dScore == null) return
       raw[`d${diffType}`] = dScore
 
       if (!isWH) {
@@ -599,7 +599,7 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
           .map(el => el.result[`aq${diffType}`])
           .filter(el => typeof el === 'number')
         const aqScore = ijruAverage(aqScores)
-        if (aqScore == null) throw new RSRMissingJudgeResultError(judgeTypeId)
+        if (aqScore == null) return
         raw[`q${diffType}`] = Math.round(aqScore)
       }
     }
@@ -613,7 +613,7 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
       .map(el => el.result.p)
       .filter(el => typeof el === 'number')
     const pScore = ijruAverage(pScores)
-    if (pScore == null) throw new RSRMissingJudgeResultError('P')
+    if (pScore == null) return
     raw.P = roundTo(pScore * ((2 * Fp) / 24), 2)
 
     for (const reqEl of techReqEls) {
@@ -621,7 +621,7 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
         .map(el => el.result[`aq${reqEl}`])
         .filter(el => typeof el === 'number')
       const aqScore = ijruAverage(aqScores)
-      if (aqScore == null) throw new RSRMissingJudgeResultError('T')
+      if (aqScore == null) return
       raw[`q${reqEl}`] = Math.round(aqScore)
     }
     raw.Q = roundTo(
@@ -638,7 +638,7 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
     const avScore = ijruAverage(results
       .map(el => el.result.nv)
       .filter(el => typeof el === 'number'))
-    if (amScore == null || abScore == null || avScore == null) throw new RSRMissingJudgeResultError('T')
+    if (amScore == null || abScore == null || avScore == null) return
     raw.am = Math.round(amScore)
     raw.ab = Math.round(abScore)
     raw.av = Math.round(avScore)

@@ -1,4 +1,4 @@
-import { RSRMissingJudgeResultError, RSRWrongJudgeTypeError } from '../../errors.js'
+import { RSRWrongJudgeTypeError } from '../../errors.js'
 import type { MarkReducer } from '../../helpers/helpers.js'
 import { clampNumber, normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, createMarkReducer, calculateTallyFactory } from '../../helpers/helpers.js'
 import { ijruAverage } from '../../helpers/ijru.js'
@@ -281,13 +281,13 @@ export default {
       .filter(el => el.meta.judgeTypeId === 'Dj')
       .map(el => el.result.d)
       .filter(el => typeof el === 'number'))
-    if (djScore == null) throw new RSRMissingJudgeResultError('Dj')
+    if (djScore == null) return
     raw.Dj = roundTo(djScore, 2)
     const dtScore = ijruAverage(results
       .filter(el => el.meta.judgeTypeId === 'Dt')
       .map(el => el.result.d)
       .filter(el => typeof el === 'number'))
-    if (dtScore == null) throw new RSRMissingJudgeResultError('Dt')
+    if (dtScore == null) return
     raw.Dt = roundTo(dtScore, 2)
 
     raw.D = roundTo(
@@ -299,7 +299,7 @@ export default {
       .map(el => el.result.p)
       .filter(el => typeof el === 'number')
     const pScore = ijruAverage(pScores)
-    if (pScore == null) throw new RSRMissingJudgeResultError('P')
+    if (pScore == null) return
     raw.P = roundTo(pScore * ((2 * Fp) / 24), 2)
 
     const amScore = ijruAverage(results
@@ -308,7 +308,7 @@ export default {
     const avScore = ijruAverage(results
       .map(el => el.result.nv)
       .filter(el => typeof el === 'number'))
-    if (amScore == null || avScore == null) throw new RSRMissingJudgeResultError('T')
+    if (amScore == null || avScore == null) return
     raw.am = Math.round(amScore)
     raw.av = Math.round(avScore)
 

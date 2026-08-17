@@ -6,12 +6,6 @@ export class RSRWrongJudgeTypeError extends RSRError {
   }
 }
 
-export class RSRMissingJudgeResultError extends RSRError {
-  constructor (judgeTypeId: string) {
-    super(`Missing judge result for judge type ${judgeTypeId}`)
-  }
-}
-
 export class RSUnsupported extends RSRError {
   constructor (type: `${'competition-event' | 'overall'}-${'model' | 'preconfigured'}` | 'ruleset', id: string) {
     super(`Unsupported ${type}: ${id}`)
