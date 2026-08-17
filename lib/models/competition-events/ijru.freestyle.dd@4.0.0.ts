@@ -106,6 +106,7 @@ export const difficultyJumperJudge: JudgeTypeGetter<Option> = options => {
     name: 'Difficulty - Jumpers',
     markDefinitions,
     tallyDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(reducer as unknown as MarkReducer<string, string>, tallyDefinitions),
     calculateTally: calculateTallyFactory(id, reducer as unknown as MarkReducer<string, string>, tallyDefinitions),
     calculateJudgeResult: (scsh) => {
@@ -198,6 +199,7 @@ export const difficultyTurnerJudge: JudgeTypeGetter<Option> = options => {
     name: 'Difficulty - Turners',
     markDefinitions,
     tallyDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(reducer as unknown as MarkReducer<string, string>, tallyDefinitions),
     calculateTally: calculateTallyFactory(id, reducer as unknown as MarkReducer<string, string>, tallyDefinitions),
     calculateJudgeResult: (scsh) => {
@@ -266,6 +268,7 @@ export default {
   options: [
     { id: 'diffTurnerSkillDivisor', name: 'Difficulty Turner - number of skills counted', type: 'number', min: 0, step: 1 },
   ],
+  statusDefinitions: [],
   judges: [presentationJudge, technicalJudgeFactory({ discipline: 'dd' }) as JudgeTypeGetter<Option>, difficultyJumperJudge, difficultyTurnerJudge],
 
   calculateEntry: (meta, res, options) => {

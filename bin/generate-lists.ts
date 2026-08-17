@@ -43,6 +43,7 @@ async function run () {
       id: model.id,
       name: model.name,
       options: model.options,
+      statusDefinitions: model.statusDefinitions,
       judges: model.judges.map(j => {
         const judge = j({})
         return { id: judge.id, name: judge.name }
@@ -62,6 +63,7 @@ async function run () {
       name: model.name,
       options: model.options,
       competitionEventOptions: model.competitionEventOptions,
+      statusDefinitions: model.statusDefinitions,
     }
   }
 
@@ -77,6 +79,7 @@ async function run () {
       modelId: model.modelId,
       name: model.name,
       options: model.options,
+      statusDefinitions: model.statusDefinitions,
       judges: model.judges.map(j => {
         const judge = j({})
         return { id: judge.id, name: judge.name }
@@ -96,6 +99,7 @@ async function run () {
       modelId: model.modelId,
       name: model.name,
       options: model.options,
+      statusDefinitions: model.statusDefinitions,
       competitionEvents: model.competitionEvents,
     }
   }

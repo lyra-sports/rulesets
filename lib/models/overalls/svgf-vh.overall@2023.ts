@@ -109,6 +109,7 @@ export default {
   competitionEventOptions: [
     { id: 'name', name: 'Name', type: 'string' },
   ],
+  statusDefinitions: [],
   resultTable: overallTableFactory,
   rankOverall (results, options, competitionEventOptions) {
     const components: Partial<Record<CompetitionEventDefinition, readonly EntryResult[]>> = {}

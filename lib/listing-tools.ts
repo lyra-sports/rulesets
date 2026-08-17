@@ -1,10 +1,12 @@
 import { type CompetitionEventDefinition } from './preconfigured/types.js'
-import { type ModelOption } from './models/types.js'
+import { type ModelOption, type ModelStatus } from './models/types.js'
 
 export interface CompetitionEventModelInfo {
   id: string
   name: string
   options: Readonly<Array<ModelOption<string>>>
+  // The formatter is a function and doesn't survive the JSON serialisation
+  statusDefinitions: Readonly<Array<Omit<ModelStatus<string>, 'formatter'>>>
   // We can't include fieldDefinitions here since they depend on options
   judges: Readonly<Array<{ id: string, name: string }>>
 }
@@ -14,6 +16,8 @@ export interface OverallModelInfo {
   name: string
   options: Readonly<Array<ModelOption<string>>>
   competitionEventOptions: Readonly<Array<ModelOption<string>>>
+  // The formatter is a function and doesn't survive the JSON serialisation
+  statusDefinitions: Readonly<Array<Omit<ModelStatus<string>, 'formatter'>>>
 }
 
 export interface CompetitionEventInfo extends Omit<CompetitionEventModelInfo, 'id'> {

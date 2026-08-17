@@ -46,6 +46,7 @@ export const timingJudge: JudgeTypeGetter<Option, MarkSchema, TallySchema> = opt
     name: 'Timing',
     markDefinitions,
     tallyDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(reducer, tallyDefinitions),
     calculateTally: calculateTallyFactory(id, reducer, tallyDefinitions),
     calculateJudgeResult: scsh => {
@@ -83,6 +84,7 @@ export default {
   id: 'svgf-vh.timing@2023',
   name: 'SvGF Vikingahoppet Timing 2023',
   options: [],
+  statusDefinitions: [],
   judges: [timingJudge as JudgeTypeGetter<Option>],
 
   calculateEntry (meta, res, options) {

@@ -49,6 +49,7 @@ export const difficultyJudgeFactory: (id: string, name: string, opts: { discipli
     name,
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -104,6 +105,7 @@ export default {
   ...ijruFreestyleSr400.default,
   id: 'ijru.freestyle.sr@4.2.0',
   name: 'IJRU Single Rope Freestyle v4.2.0',
+  statusDefinitions: [],
   judges: [
     ijruFreestyleSr400.presentationJudge,
     ijruFreestyleSr400.technicalJudgeFactory({ discipline: 'sr' }),

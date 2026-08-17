@@ -18,6 +18,7 @@ export function partiallyConfigureCompetitionEventModel <Option extends string> 
     modelId: model.id,
     name: options.name,
     options: model.options.filter(o => !(o.id in options.options)),
+    statusDefinitions: model.statusDefinitions,
     judges: model.judges.map(j => (o: Partial<Record<Option, unknown>>) => j({ ...o, ...options.options })),
     calculateEntry (meta, results, o) {
       return model.calculateEntry(meta, results, { ...o, ...options.options })
@@ -53,6 +54,7 @@ export function partiallyConfigureOverallModel <Option extends string, Competiti
     modelId: model.id,
     name: options.name,
     options: model.options.filter(o => !(o.id in options.options)),
+    statusDefinitions: model.statusDefinitions,
     competitionEvents: Object.keys(options.competitionEventOptions) as CompetitionEventDefinition[],
     rankOverall (results, o) {
       return model.rankOverall(results, { ...o, ...options.options }, options.competitionEventOptions)

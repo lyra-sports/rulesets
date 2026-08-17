@@ -249,6 +249,7 @@ export const presentationJudge: JudgeTypeGetter = options => {
     name: 'Presentation',
     markDefinitions,
     tallyDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(reducer as unknown as MarkReducer<string, string>, tallyDefinitions),
     calculateTally: scsh => {
       if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
@@ -406,6 +407,7 @@ export const technicalJudgeFactory = ({ discipline }: { discipline: 'sr' | 'wh' 
     name: 'Technical Judge',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -477,6 +479,7 @@ export const difficultyJudgeFactory: (id: string, name: string, opts: { discipli
     name,
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -658,6 +661,7 @@ export default {
     { id: 'maxRqRopeManipulation', name: 'Rope Manipulation Required Elements', type: 'number', min: 0, step: 1 },
     { id: 'maxRqInteractions', name: 'Interactions Required Elements', type: 'number', min: 0, step: 1 },
   ],
+  statusDefinitions: [],
   judges: [presentationJudge, technicalJudgeFactory({ discipline: 'sr' }), difficultyJudgeFactory('Dp', 'Difficulty - Power and Gymnastics', { discipline: 'sr' }), difficultyJudgeFactory('Dm', 'Difficulty - Multiples', { discipline: 'sr' }), difficultyJudgeFactory('Dr', 'Difficulty - Rope Manipulation', { discipline: 'sr' })],
 
   calculateEntry: calculateEntryFactory({ discipline: 'sr' }),

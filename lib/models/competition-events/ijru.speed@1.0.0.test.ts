@@ -323,4 +323,26 @@ void test('ijru.speed@3.0.0', async t => {
       ])
     })
   })
+
+  await t.test('model status definitions', async t => {
+    await t.test('withinThree', async t => {
+      const statusDefinition = mod.default.statusDefinitions.find(s => s.id === 'withinThree')
+
+      assert.ok(statusDefinition != null, 'Status definition is missing for withinTree')
+
+      await t.test('true', () => {
+        assert.deepStrictEqual(statusDefinition?.formatter(true), {
+          text: 'No',
+          severity: 'neutral',
+        })
+      })
+
+      await t.test('false', () => {
+        assert.deepStrictEqual(statusDefinition?.formatter(false), {
+          text: 'Yes',
+          severity: 'warning',
+        })
+      })
+    })
+  })
 })

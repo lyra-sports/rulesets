@@ -79,6 +79,7 @@ export const routinePresentationJudge: JudgeTypeGetter<Option> = options => {
     name: 'Routine Presentation',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -143,6 +144,7 @@ export const athletePresentationJudge: JudgeTypeGetter<Option> = options => {
     name: 'Athlete Presentation',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -235,6 +237,7 @@ export const requiredElementsJudge: JudgeTypeGetter<Option> = options => {
     name: 'Required Elements',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -289,6 +292,7 @@ export const difficultyJudge: JudgeTypeGetter<Option> = options => {
     name: 'Difficulty',
     markDefinitions: fieldDefinitions,
     tallyDefinitions: fieldDefinitions,
+    statusDefinitions: [],
     createMarkReducer: () => createMarkReducer(simpleReducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, simpleReducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
@@ -340,6 +344,7 @@ export default {
     { id: 'discipline', name: 'Discipline', type: 'enum', enum: ['sr', 'dd', 'wh', 'ts', 'xd'] },
     { id: 'interactions', name: 'Has Interactions', type: 'boolean' },
   ],
+  statusDefinitions: [],
   judges: [routinePresentationJudge, athletePresentationJudge, requiredElementsJudge, difficultyJudge],
 
   calculateEntry (meta, res, options) {
