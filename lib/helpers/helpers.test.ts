@@ -37,6 +37,16 @@ void test('helpers', async t => {
       assert.strictEqual(roundToMultiple(5.5, 1), 6)
       assert.strictEqual(roundToMultiple(5.6, 1), 6)
     })
+    await t.test('rounds negative values away from zero on ties', () => {
+      assert.strictEqual(roundToMultiple(-5.4, 1), -5)
+      assert.strictEqual(roundToMultiple(-5.5, 1), -6)
+      assert.strictEqual(roundToMultiple(-5.6, 1), -6)
+      assert.strictEqual(roundToMultiple(-1.25, 0.5), -1.5)
+    })
+    await t.test('returns exact values for decimal multiples', () => {
+      assert.strictEqual(roundToMultiple(0.3, 0.1), 0.3)
+      assert.strictEqual(roundToMultiple(2.7, 0.1), 2.7)
+    })
   })
 
   await t.test('roundTo', async t => {

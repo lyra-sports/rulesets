@@ -21,12 +21,9 @@ export function isTallyScoresheet <Schema extends string = string> (scoresheet: 
  * rounded to 1.5
  */
 export function roundToMultiple (num: number, multiple: number): number {
-  const resto = num % multiple
-  if (resto < multiple / 2) {
-    return num - resto
-  } else {
-    return num + multiple - resto
-  }
+  const quotient = num / multiple
+  const rounded = Math.sign(quotient) * Math.round(Math.abs(quotient))
+  return roundTo(rounded * multiple, 12)
 }
 
 /**
