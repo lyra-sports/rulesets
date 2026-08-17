@@ -120,6 +120,7 @@ export const presentationJudge: JudgeTypeGetter<Option> = options => {
     createMarkReducer: () => createMarkReducer(reducer, fieldDefinitions),
     calculateTally: calculateTallyFactory(id, reducer, fieldDefinitions),
     calculateJudgeResult: scsh => {
+      if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
       const tally = normaliseTally(fieldDefinitions, scsh.tally)
 
       const score = fieldDefinitions
