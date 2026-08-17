@@ -98,5 +98,14 @@ export default defineConfig(
     rules: {
       'no-console': 'off',
     },
+  },
+  {
+    name: 'RopeScore/smoke',
+    files: ['bin/smoke.cjs', 'bin/smoke.mjs'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+    },
   }
 )

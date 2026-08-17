@@ -9,7 +9,7 @@ const rulesetRegex = /^[a-z0-9-]+@(?<version>[a-z0-9-.]+)$/
 
 function unwrapDefault<T> (mod: { default: T | { default: T } }): T {
   const def = mod.default
-  return def != null && typeof def === 'object' && 'default' in def ? (def as { default: T }).default : def
+  return def != null && typeof def === 'object' && 'default' in def ? def.default : def
 }
 
 function isModuleNotFoundError (err: unknown): boolean {

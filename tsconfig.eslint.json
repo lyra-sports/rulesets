@@ -12,6 +12,8 @@
     "**/*.js",
     "./*.mjs",
     "./.*.js",
+    "./bin/*.cjs",
+    "./bin/*.mjs",
     "./data/*.json"
   ],
   "exclude": [
