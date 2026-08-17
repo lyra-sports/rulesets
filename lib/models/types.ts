@@ -25,9 +25,8 @@ export interface JudgeType<MarkSchema extends string, TallySchema extends string
    */
   tallyDefinitions: Readonly<Array<JudgeTallyFieldDefinition<TallySchema>>>
   /**
-   * These are the statuses this judge type may report in the statuses object of
-   * the judge result, along with how to present them to a user. A judge type
-   * that reports no statuses should provide an empty array.
+   * Definitions of the values in the statuses object of the judge result, and
+   * how to format the value when displaying it to a user.
    */
   statusDefinitions: Readonly<Array<ModelStatus<Status>>>
   /**
@@ -236,6 +235,10 @@ export interface BaseModel<Option extends string, Status extends string> {
   id: `${string}.${string}@${string}`
   name: string
   options: Readonly<Array<ModelOption<Option>>>
+  /**
+   * Definitions of the values in the statuses object of the entry or overall
+   * result, and how to format the value when displaying it to a user.
+   */
   statusDefinitions: Readonly<Array<ModelStatus<Status>>>
 }
 
