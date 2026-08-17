@@ -23,6 +23,61 @@ void test('ijru.freestyle@2.0.0', async t => {
     }
   })
 
+  await t.test('requiredElementsJudge', async t => {
+    const meta: JudgeMeta = {
+      judgeId: '1',
+      judgeTypeId: 'R',
+      entryId: '1',
+      participantId: '1',
+      competitionEvent: 'e.ijru.fs.sr.srif.1.75@2.0.0',
+    }
+    const judge = mod.requiredElementsJudge
+
+    assert.strictEqual(judge({}).id, 'R')
+
+    await t.test('calculates a judge result', () => {
+      assert.deepStrictEqual(
+        judge({}).calculateJudgeResult({
+          meta,
+          tally: {
+            rqGymnasticsPower: 2,
+            rqMultiples: 3,
+            rqWrapsReleases: 1,
+            miss: 2,
+            timeViolation: 1,
+            spaceViolation: 0,
+            repL3: 2,
+            repL5: 1,
+          },
+        }),
+        { meta, result: { Q: 0.85, m: 0.95, v: 0.975, U: 3.05 }, statuses: {} }
+      )
+    })
+  })
+
+  await t.test('difficultyJudge', async t => {
+    const meta: JudgeMeta = {
+      judgeId: '1',
+      judgeTypeId: 'D',
+      entryId: '1',
+      participantId: '1',
+      competitionEvent: 'e.ijru.fs.sr.srif.1.75@2.0.0',
+    }
+    const judge = mod.difficultyJudge
+
+    assert.strictEqual(judge({}).id, 'D')
+
+    await t.test('calculates a judge result', () => {
+      assert.deepStrictEqual(
+        judge({}).calculateJudgeResult({
+          meta,
+          tally: { 'diffL0.5': 1, diffL1: 2, diffL3: 1 },
+        }),
+        { meta, result: { D: 1.07 }, statuses: {} }
+      )
+    })
+  })
+
   await t.test('calculateEntry', async t => {
     const jMeta = (jId: string, jTId: string): JudgeMeta => ({
       judgeId: jId,
