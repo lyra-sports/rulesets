@@ -1,4 +1,4 @@
-import { parseCompetitionEventDefinition, roundTo } from '../../helpers/helpers.js'
+import { filterParticipatingInAll, parseCompetitionEventDefinition, roundTo } from '../../helpers/helpers.js'
 import { type CompetitionEventDefinition } from '../../preconfigured/types.js'
 import { type TableHeaderGroup, type OverallModel, type TableDefinitionGetter, type TableHeader, type EntryResult } from '../types.js'
 
@@ -131,12 +131,14 @@ export default {
     const components: Partial<Record<CompetitionEventDefinition, readonly EntryResult[]>> = {}
     const competitionEventIds: CompetitionEventDefinition[] = Object.keys(competitionEventOptions) as CompetitionEventDefinition[]
 
+    const eligibleResults = filterParticipatingInAll(results, competitionEventIds)
+
     for (const cEvtDef of competitionEventIds) {
-      const ranked = results.filter(result => result.meta.competitionEvent === cEvtDef)
+      const ranked = eligibleResults.filter(result => result.meta.competitionEvent === cEvtDef)
       components[cEvtDef] = ranked
     }
 
-    const participantIds = [...new Set(results.map(r => r.meta.participantId))]
+    const participantIds = [...new Set(eligibleResults.map(r => r.meta.participantId))]
 
     const ranked = participantIds.map(participantId => {
       const cRes = competitionEventIds

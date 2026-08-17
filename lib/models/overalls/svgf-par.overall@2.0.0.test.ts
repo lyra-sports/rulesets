@@ -43,6 +43,19 @@ void test('svgf-par.overall@2.0.0', async t => {
       )
     })
 
+    await t.test('excludes participants who did not compete in every event', () => {
+      const results = [
+        entryResult('alice', srpf, { R: 50, S: 2, N: 90 }),
+        entryResult('alice', srdr, { R: 20, S: 1, N: 100 }),
+        entryResult('grace', srpf, { R: 60, S: 1, N: 100 }),
+      ]
+      const ranked = model.rankOverall(results, {}, competitionEventOptions)
+      assert.deepStrictEqual(
+        ranked.map(r => ({ participantId: r.meta.participantId, S: r.result.S })),
+        [{ participantId: 'alice', S: 1 }]
+      )
+    })
+
     await t.test('shares a rank only when both rank sum and normalised score tie', () => {
       const results = [
         entryResult('dave', srpf, { R: 50, S: 1, N: 100 }),
