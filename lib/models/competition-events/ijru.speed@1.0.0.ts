@@ -145,8 +145,9 @@ export default {
     // calc withinThree
     const minDiff = Math.min(...results
       .map(res => res.result.a)
+      .filter(a => typeof a === 'number')
       .sort((a, b) => a - b)
-      .flatMap((res, idx, arr) => arr[idx + 1] - res)
+      .flatMap((res, idx, arr) => (arr[idx + 1] ?? NaN) - res)
       .filter(n => !Number.isNaN(n)))
     const withinThree = minDiff <= 3
 
@@ -168,15 +169,15 @@ export default {
       return (b.result.R ?? 0) - (a.result.R ?? 0) // sort descending
     })
 
-    const high = results.length > 0 ? results[0].result.R ?? 0 : 0
-    const low = results.length > 1 ? results[results.length - 1].result.R ?? 0 : 0
+    const high = results[0]?.result.R ?? 0
+    const low = results.length > 1 ? results[results.length - 1]?.result.R ?? 0 : 0
 
     results = results.map((el, _, arr) => ({
       ...el,
       result: {
         ...el.result,
         S: arr.findIndex(obj => obj.result.R === el.result.R) + 1,
-        N: roundTo((((100 - 1) * ((el.result.R ?? 0) - low)) / ((high - low !== 0) ? high - low : 1)) + 1, 2),
+        N: roundTo((((100 - 1) * ((el.result.R ?? 0) - low)) / ((high - low) !== 0 ? high - low : 1)) + 1, 2),
       },
     }))
 

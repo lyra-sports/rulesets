@@ -1,4 +1,5 @@
-export const ijruAverage = (_scores: readonly number[]): number => {
+export const ijruAverage = (_scores: readonly number[]): number | undefined => {
+  if (_scores.length === 0) return undefined
   // sort ascending
   const scores = [..._scores]
   scores.sort(function (a, b) {
@@ -12,12 +13,11 @@ export const ijruAverage = (_scores: readonly number[]): number => {
     const score = scores.reduce((a, b) => a + b)
     return score / scores.length
   } else if (scores.length === 3) {
-    const closest = scores[1] - scores[0] < scores[2] - scores[1] ? scores[1] + scores[0] : scores[2] + scores[1]
+    const [s0 = 0, s1 = 0, s2 = 0] = scores
+    const closest = s1 - s0 < s2 - s1 ? s1 + s0 : s2 + s1
     return closest / 2
-  } else if (scores.length === 2) {
+  } else {
     const score = scores.reduce((a, b) => a + b)
     return score / scores.length
-  } else {
-    return scores[0]
   }
 }

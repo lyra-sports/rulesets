@@ -114,10 +114,10 @@ async function run () {
     rulesetsInfo[cEvt] = {
       id: model.id,
       name: model.name,
-      competitionEvents: model.competitionEvents.map(cEvt => competitionEventsInfo[cEvt.id]),
-      overalls: model.overalls.map(cEvt => overallsInfo[cEvt.id]),
-      competitionEventModels: model.competitionEventModels.map(cEvt => cEvtModelInfo[cEvt.id]),
-      overallModels: model.overallModels.map(cEvt => overallModelsInfo[cEvt.id]),
+      competitionEvents: model.competitionEvents.map(cEvt => competitionEventsInfo[cEvt.id]).filter(info => info != null),
+      overalls: model.overalls.map(cEvt => overallsInfo[cEvt.id]).filter(info => info != null),
+      competitionEventModels: model.competitionEventModels.map(cEvt => cEvtModelInfo[cEvt.id]).filter(info => info != null),
+      overallModels: model.overallModels.map(cEvt => overallModelsInfo[cEvt.id]).filter(info => info != null),
     }
   }
 

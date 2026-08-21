@@ -277,14 +277,18 @@ export default {
 
     const raw: Record<string, number> = {}
 
-    raw.Dj = roundTo(ijruAverage(results
+    const djScore = ijruAverage(results
       .filter(el => el.meta.judgeTypeId === 'Dj')
       .map(el => el.result.d)
-      .filter(el => typeof el === 'number')), 2)
-    raw.Dt = roundTo(ijruAverage(results
+      .filter(el => typeof el === 'number'))
+    if (djScore == null) return
+    raw.Dj = roundTo(djScore, 2)
+    const dtScore = ijruAverage(results
       .filter(el => el.meta.judgeTypeId === 'Dt')
       .map(el => el.result.d)
-      .filter(el => typeof el === 'number')), 2)
+      .filter(el => typeof el === 'number'))
+    if (dtScore == null) return
+    raw.Dt = roundTo(dtScore, 2)
 
     raw.D = roundTo(
       (raw.Dj * Fdj) + (raw.Dt * Fdt),
@@ -294,14 +298,19 @@ export default {
     const pScores = results
       .map(el => el.result.p)
       .filter(el => typeof el === 'number')
-    raw.P = roundTo(ijruAverage(pScores) * ((2 * Fp) / 24), 2)
+    const pScore = ijruAverage(pScores)
+    if (pScore == null) return
+    raw.P = roundTo(pScore * ((2 * Fp) / 24), 2)
 
-    raw.am = Math.round(ijruAverage(results
+    const amScore = ijruAverage(results
       .map(el => el.result.nm)
-      .filter(el => typeof el === 'number')))
-    raw.av = Math.round(ijruAverage(results
+      .filter(el => typeof el === 'number'))
+    const avScore = ijruAverage(results
       .map(el => el.result.nv)
-      .filter(el => typeof el === 'number')))
+      .filter(el => typeof el === 'number'))
+    if (amScore == null || avScore == null) return
+    raw.am = Math.round(amScore)
+    raw.av = Math.round(avScore)
 
     raw.m = (Fm1 * clampNumber(raw.am, { max: 1 })) +
       (Fm2 * clampNumber(raw.am - 1, { min: 0, max: 1 })) +
@@ -331,8 +340,8 @@ export default {
       return 0
     })
 
-    const high = results.length > 0 ? results[0].result.R ?? 0 : 0
-    const low = results.length > 1 ? results[results.length - 1].result.R ?? 0 : 0
+    const high = results[0]?.result.R ?? 0
+    const low = results.length > 1 ? results[results.length - 1]?.result.R ?? 0 : 0
 
     results = results.map((el, idx, arr) => ({
       ...el,

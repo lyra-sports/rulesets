@@ -485,8 +485,8 @@ export const difficultyJudgeFactory: (id: string, name: string, opts: { discipli
     calculateJudgeResult: scsh => {
       if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
       const tally = normaliseTally(fieldDefinitions, scsh.tally)
-      const d = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * L(levels[f.schema])).reduce((a, b) => a + b, 0)
-      const rq = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * (levels[f.schema] < (options.rqFullCreditThresholdLevel as number | undefined ?? 3) ? 0.5 : 1)).reduce((a, b) => a + b, 0)
+      const d = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * L(levels[f.schema] ?? 0)).reduce((a, b) => a + b, 0)
+      const rq = fieldDefinitions.filter(f => f.schema !== 'rep').map(f => (tally[f.schema] ?? 0) * ((levels[f.schema] ?? 0) < (options.rqFullCreditThresholdLevel as number | undefined ?? 3) ? 0.5 : 1)).reduce((a, b) => a + b, 0)
 
       const rqType = id.charAt(1).toLocaleUpperCase()
       let maxRqType = 6
@@ -583,19 +583,24 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
     const raw: Record<string, number> = {}
 
     for (const diffType of diffTypes) {
+      const judgeTypeId = `D${diffType.toLocaleLowerCase()}`
       const judgeTypeResults = results
-        .filter(el => el.meta.judgeTypeId === `D${diffType.toLocaleLowerCase()}`)
+        .filter(el => el.meta.judgeTypeId === judgeTypeId)
 
       const dScores = judgeTypeResults
         .map(el => el.result.d)
         .filter(el => typeof el === 'number')
-      raw[`d${diffType}`] = ijruAverage(dScores)
+      const dScore = ijruAverage(dScores)
+      if (dScore == null) return
+      raw[`d${diffType}`] = dScore
 
       if (!isWH) {
         const aqScores = judgeTypeResults
           .map(el => el.result[`aq${diffType}`])
           .filter(el => typeof el === 'number')
-        raw[`q${diffType}`] = Math.round(ijruAverage(aqScores))
+        const aqScore = ijruAverage(aqScores)
+        if (aqScore == null) return
+        raw[`q${diffType}`] = Math.round(aqScore)
       }
     }
     raw.D = roundTo(
@@ -607,28 +612,36 @@ export function calculateEntryFactory ({ discipline }: { discipline: 'sr' | 'wh'
     const pScores = results
       .map(el => el.result.p)
       .filter(el => typeof el === 'number')
-    raw.P = roundTo(ijruAverage(pScores) * ((2 * Fp) / 24), 2)
+    const pScore = ijruAverage(pScores)
+    if (pScore == null) return
+    raw.P = roundTo(pScore * ((2 * Fp) / 24), 2)
 
     for (const reqEl of techReqEls) {
       const aqScores = results
         .map(el => el.result[`aq${reqEl}`])
         .filter(el => typeof el === 'number')
-      raw[`q${reqEl}`] = Math.round(ijruAverage(aqScores))
+      const aqScore = ijruAverage(aqScores)
+      if (aqScore == null) return
+      raw[`q${reqEl}`] = Math.round(aqScore)
     }
     raw.Q = roundTo(
       1 - (Fq * (['qP', 'qM', 'qR', 'qI'].map(score => raw[score] ?? 0).reduce((a, b) => a + b, 0))),
       2
     )
 
-    raw.am = Math.round(ijruAverage(results
+    const amScore = ijruAverage(results
       .map(el => el.result.nm)
-      .filter(el => typeof el === 'number')))
-    raw.ab = Math.round(ijruAverage(results
+      .filter(el => typeof el === 'number'))
+    const abScore = ijruAverage(results
       .map(el => el.result.nb)
-      .filter(el => typeof el === 'number')))
-    raw.av = Math.round(ijruAverage(results
+      .filter(el => typeof el === 'number'))
+    const avScore = ijruAverage(results
       .map(el => el.result.nv)
-      .filter(el => typeof el === 'number')))
+      .filter(el => typeof el === 'number'))
+    if (amScore == null || abScore == null || avScore == null) return
+    raw.am = Math.round(amScore)
+    raw.ab = Math.round(abScore)
+    raw.av = Math.round(avScore)
 
     raw.m = (Fm1 * clampNumber(raw.am, { max: 1 })) +
       (Fm2 * clampNumber(raw.am - 1, { min: 0, max: 1 })) +
@@ -677,8 +690,8 @@ export default {
       return 0
     })
 
-    const high = results.length > 0 ? results[0].result.R ?? 0 : 0
-    const low = results.length > 1 ? results[results.length - 1].result.R ?? 0 : 0
+    const high = results[0]?.result.R ?? 0
+    const low = results.length > 1 ? results[results.length - 1]?.result.R ?? 0 : 0
 
     results = results.map((el, idx, arr) => ({
       ...el,

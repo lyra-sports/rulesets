@@ -16,6 +16,34 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
 
+  package:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20, 22, 24]
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci --prefer-offline
+      - run: npm run build
+      - run: npm run check:package
+      - run: npm pack
+      - name: Smoke test the packed tarball
+        run: |
+          tarball="$(ls ropescore-rulesets-*.tgz)"
+          mkdir -p "$RUNNER_TEMP/smoke"
+          cp bin/smoke.cjs bin/smoke.mjs "$RUNNER_TEMP/smoke/"
+          cd "$RUNNER_TEMP/smoke"
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund "$GITHUB_WORKSPACE/$tarball"
+          node smoke.cjs
+          node smoke.mjs
+
   test:
     runs-on: ubuntu-latest
 

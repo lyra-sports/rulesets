@@ -21,12 +21,9 @@ export function isTallyScoresheet <Schema extends string = string> (scoresheet: 
  * rounded to 1.5
  */
 export function roundToMultiple (num: number, multiple: number): number {
-  const resto = num % multiple
-  if (resto < multiple / 2) {
-    return num - resto
-  } else {
-    return num + multiple - resto
-  }
+  const quotient = num / multiple
+  const rounded = Math.sign(quotient) * Math.round(Math.abs(quotient))
+  return roundTo(rounded * multiple, 12)
 }
 
 /**
@@ -88,7 +85,7 @@ export function filterMarkStream <Schema extends string> (rawMarks: Readonly<Arr
       // before the undo mark, and will most likely be just before teh undo mark
       // therefore findIndex or findLastIndex would be wasteful
       for (let tIdx = idx - 1; tIdx >= 0; tIdx--) {
-        if (marks[tIdx].sequence === mark.target) {
+        if (marks[tIdx]?.sequence === mark.target) {
           targetIdx = tIdx
           break
         }
@@ -259,13 +256,14 @@ const cEvtRegex = /^e\.(?<org>[a-z0-9-]+)\.(?<type>fs|sp|oa)\.(?<discipline>sr|d
 export function parseCompetitionEventDefinition (competitionEvent: string) {
   const match = cEvtRegex.exec(competitionEvent)
   if (match?.groups == null) throw new TypeError(`Not a valid competition event, got ${competitionEvent}`)
+  const { org = '', type = '', discipline = '', eventAbbr = '', numParticipants = '', timing = '', version } = match.groups
   return {
-    org: match.groups.org,
-    type: match.groups.type as 'fs' | 'sp' | 'oa',
-    discipline: match.groups.discipline as 'sr' | 'dd' | 'wh' | 'ts' | 'xd',
-    eventAbbr: match.groups.eventAbbr,
-    numParticipants: parseInt(match.groups.numParticipants, 10),
-    timing: match.groups.timing,
-    version: match.groups.version ?? null as string | null,
+    org,
+    type: type as 'fs' | 'sp' | 'oa',
+    discipline: discipline as 'sr' | 'dd' | 'wh' | 'ts' | 'xd',
+    eventAbbr,
+    numParticipants: parseInt(numParticipants, 10),
+    timing,
+    version: version ?? null as string | null,
   }
 }

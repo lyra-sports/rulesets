@@ -1,4 +1,4 @@
-import { roundTo, roundToCurry } from '../../helpers/helpers.js'
+import { filterParticipatingInAll, roundTo, roundToCurry } from '../../helpers/helpers.js'
 import { type CompetitionEventDefinition } from '../../preconfigured/types.js'
 import { type TableHeaderGroup, type OverallModel, type TableDefinitionGetter, type TableHeader, type EntryResult } from '../types.js'
 
@@ -43,8 +43,9 @@ export const overallTableFactory: TableDefinitionGetter<Option, CompetitionEvent
   const evtGroup: TableHeaderGroup[] = []
 
   for (const cEvt of [...srEvts, ...ddEvts]) {
+    const name = cEvtOptions[cEvt]?.name
     evtGroup.push({
-      text: typeof cEvtOptions[cEvt].name === 'string' ? cEvtOptions[cEvt].name.replace(/^(Double Dutch|Single Rope) /, '') : cEvt.split('.')[4] ?? '',
+      text: typeof name === 'string' ? name.replace(/^(Double Dutch|Single Rope) /, '') : cEvt.split('.')[4] ?? '',
       key: cEvt,
       colspan: 2,
     })
@@ -106,12 +107,14 @@ export default {
     const components: Partial<Record<CompetitionEventDefinition, readonly EntryResult[]>> = {}
     const competitionEventIds: CompetitionEventDefinition[] = Object.keys(competitionEventOptions) as CompetitionEventDefinition[]
 
+    const eligibleResults = filterParticipatingInAll(results, competitionEventIds)
+
     for (const cEvtDef of competitionEventIds) {
-      const ranked = results.filter(result => result.meta.competitionEvent === cEvtDef)
+      const ranked = eligibleResults.filter(result => result.meta.competitionEvent === cEvtDef)
       components[cEvtDef] = ranked
     }
 
-    const participantIds = [...new Set(results.map(r => r.meta.participantId))]
+    const participantIds = [...new Set(eligibleResults.map(r => r.meta.participantId))]
 
     const ranked = participantIds.map(participantId => {
       const cRes = competitionEventIds
@@ -151,7 +154,7 @@ export default {
     })
 
     for (const result of ranked) {
-      result.result.S = ranked.findIndex(obj => obj.result.B === result.result.B) + 1
+      result.result.S = ranked.findIndex(obj => obj.result.T === result.result.T && obj.result.B === result.result.B) + 1
     }
 
     return ranked

@@ -1,7 +1,7 @@
-import { RSRWrongJudgeTypeError } from '../../errors'
-import { normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers'
-import { type JudgeTypeGetter, type JudgeTallyFieldDefinition, type TableDefinition, type CompetitionEventModel } from '../types'
-import { ijruAverage } from '../../helpers/ijru'
+import { RSRWrongJudgeTypeError } from '../../errors.js'
+import { normaliseTally, formatFactor, matchMeta, roundTo, roundToCurry, calculateTallyFactory, createMarkReducer, simpleReducer } from '../../helpers/helpers.js'
+import { type JudgeTypeGetter, type JudgeTallyFieldDefinition, type TableDefinition, type CompetitionEventModel } from '../types.js'
+import { ijruAverage } from '../../helpers/ijru.js'
 
 type Option = 'noMusicality' | 'discipline' | 'interactions'
 
@@ -252,7 +252,7 @@ export const requiredElementsJudge: JudgeTypeGetter<Option> = options => {
       score = score > max ? max : score
       const missing = max - score
 
-      const diffResult = repFields.map(f => (tally[f.schema] ?? 0) * L(levels[f.schema])).reduce((a, b) => a + b)
+      const diffResult = repFields.map(f => (tally[f.schema] ?? 0) * L(levels[f.schema] ?? 0)).reduce((a, b) => a + b)
 
       return {
         meta: scsh.meta,
@@ -298,7 +298,7 @@ export const difficultyJudge: JudgeTypeGetter<Option> = options => {
       if (!matchMeta(scsh.meta, { judgeTypeId: id })) throw new RSRWrongJudgeTypeError(scsh.meta.judgeTypeId, id)
       const tally = normaliseTally(fieldDefinitions, scsh.tally)
 
-      const D = fieldDefinitions.map(f => (tally[f.schema] ?? 0) * L(levels[f.schema])).reduce((a, b) => a + b)
+      const D = fieldDefinitions.map(f => (tally[f.schema] ?? 0) * L(levels[f.schema] ?? 0)).reduce((a, b) => a + b)
       return {
         meta: scsh.meta,
         result: {
@@ -356,18 +356,19 @@ export default {
 
     for (const scoreType of ['D', 'aF', 'aE', 'aM', 'm', 'v', 'Q', 'U'] as const) {
       const scores = results.map(el => el.result[scoreType]).filter(el => typeof el === 'number')
-      if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 4)
-      else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(ijruAverage(scores), 6)
-      else raw[scoreType] = roundTo(ijruAverage(scores), 2) // D, Q, U
+      const score = ijruAverage(scores)
+      if (score == null) return
 
-      if (typeof raw[scoreType] !== 'number' || isNaN(raw[scoreType])) raw[scoreType] = (['D', 'U', 'aF', 'aE', 'aM'].includes(scoreType) ? 0 : 1)
+      if (['m', 'v'].includes(scoreType)) raw[scoreType] = roundTo(score, 4)
+      else if (['aF', 'aE', 'aM'].includes(scoreType)) raw[scoreType] = roundTo(score, 6)
+      else raw[scoreType] = roundTo(score, 2) // D, Q, U
     }
 
-    raw.M = roundTo(-(1 - raw.m - raw.v), 2) // the minus is because they're already prepped to 1- and that needs to be reversed
+    raw.M = roundTo(-(1 - (raw.m ?? 0) - (raw.v ?? 0)), 2) // the minus is because they're already prepped to 1- and that needs to be reversed
 
-    raw.P = roundTo(1 + (raw.aE + raw.aF + raw.aM), 2)
+    raw.P = roundTo(1 + ((raw.aE ?? 0) + (raw.aF ?? 0) + (raw.aM ?? 0)), 2)
 
-    raw.R = roundTo((raw.D - raw.U) * raw.P * raw.M * raw.Q, 2)
+    raw.R = roundTo(((raw.D ?? 0) - (raw.U ?? 0)) * raw.P * raw.M * (raw.Q ?? 1), 2)
     raw.R = raw.R < 0 ? 0 : raw.R
 
     return {
@@ -389,8 +390,8 @@ export default {
       return 0
     })
 
-    const high = results.length > 0 ? results[0].result.R ?? 0 : 0
-    const low = results.length > 1 ? results[results.length - 1].result.R ?? 0 : 0
+    const high = results[0]?.result.R ?? 0
+    const low = results.length > 1 ? results[results.length - 1]?.result.R ?? 0 : 0
 
     results = results.map((el, idx, arr) => ({
       ...el,
