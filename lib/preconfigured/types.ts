@@ -5,6 +5,12 @@ export type CompetitionEventDefinition = `e.${string}.${'fs' | 'sp' | 'oa'}.${'s
 export interface CompetitionEvent extends Omit<CompetitionEventModel, 'id'> {
   id: CompetitionEventDefinition
   modelId: CompetitionEventModel['id']
+  /**
+   * The option values preset by this preconfigured competition event. These
+   * are applied automatically by the judge, calculation and table functions;
+   * the options still left to configure are listed in `options`.
+   */
+  configuredOptions: Options<string>
 }
 
 export interface PartiallyConfigureCompetitionEventModelOptions<Option extends string> {
@@ -18,6 +24,7 @@ export function partiallyConfigureCompetitionEventModel <Option extends string> 
     modelId: model.id,
     name: options.name,
     options: model.options.filter(o => !(o.id in options.options)),
+    configuredOptions: options.options,
     statusDefinitions: model.statusDefinitions,
     judges: model.judges.map(j => (o: Partial<Record<Option, unknown>>) => j({ ...o, ...options.options })),
     calculateEntry (meta, results, o) {
@@ -39,6 +46,12 @@ export interface Overall extends Omit<OverallModel, 'id' | 'competitionEventOpti
   id: CompetitionEventDefinition
   modelId: OverallModel['id']
   competitionEvents: CompetitionEventDefinition[]
+  /**
+   * The option values preset by this preconfigured overall. These are applied
+   * automatically by the ranking and table functions; the options still left
+   * to configure are listed in `options`.
+   */
+  configuredOptions: Options<string>
   rankOverall: (results: Parameters<OverallModel['rankOverall']>[0], options: Parameters<OverallModel['rankOverall']>[1]) => ReturnType<OverallModel['rankOverall']>
 }
 
@@ -54,6 +67,7 @@ export function partiallyConfigureOverallModel <Option extends string, Competiti
     modelId: model.id,
     name: options.name,
     options: model.options.filter(o => !(o.id in options.options)),
+    configuredOptions: options.options,
     statusDefinitions: model.statusDefinitions,
     competitionEvents: Object.keys(options.competitionEventOptions) as CompetitionEventDefinition[],
     rankOverall (results, o) {
