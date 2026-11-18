@@ -252,7 +252,7 @@ export function validateOptions () {}
 // eslint-disable-next-line @typescript-eslint/no-empty-function
 export function validateCompetitionEventOptions () {}
 
-const cEvtRegex = /^e\.(?<org>[a-z0-9-]+)\.(?<type>fs|sp|oa)\.(?<discipline>sr|dd|wh|ts|xd)\.(?<eventAbbr>[a-z0-9-]+)\.(?<numParticipants>\d+)\.(?<timing>(?:\d+(?:x\d+)?))(?:@(?<version>[a-z0-9-.]+))?$/
+const cEvtRegex = /^e\.(?<org>[a-z0-9-]+)\.(?<type>fs|sp|oa)\.(?<discipline>sr|dd|wh|ts|xd|lr)\.(?<eventAbbr>[a-z0-9-]+)\.(?<numParticipants>\d+)\.(?<timing>(?:\d+(?:x\d+)?))(?:@(?<version>[a-z0-9-.]+))?$/
 export function parseCompetitionEventDefinition (competitionEvent: string) {
   const match = cEvtRegex.exec(competitionEvent)
   if (match?.groups == null) throw new TypeError(`Not a valid competition event, got ${competitionEvent}`)
@@ -260,7 +260,7 @@ export function parseCompetitionEventDefinition (competitionEvent: string) {
   return {
     org,
     type: type as 'fs' | 'sp' | 'oa',
-    discipline: discipline as 'sr' | 'dd' | 'wh' | 'ts' | 'xd',
+    discipline: discipline as 'sr' | 'dd' | 'wh' | 'ts' | 'xd' | 'lr',
     eventAbbr,
     numParticipants: parseInt(numParticipants, 10),
     timing,

@@ -309,5 +309,17 @@ void test('helpers', async t => {
         version: '3.0.0',
       })
     })
+
+    await t.test('Should parse long rope', () => {
+      assert.deepStrictEqual(parseCompetitionEventDefinition('e.ijru.sp.lr.lrsr.4.60'), {
+        org: 'ijru',
+        type: 'sp',
+        discipline: 'lr',
+        eventAbbr: 'lrsr',
+        numParticipants: 4,
+        timing: '60',
+        version: null,
+      })
+    })
   })
 })
