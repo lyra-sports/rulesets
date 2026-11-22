@@ -20,7 +20,7 @@ import eIjruFsSrSrtf475420 from '../preconfigured/competition-events/ijru/4.2.0/
 import eIjruFsDdDdsf375400 from '../preconfigured/competition-events/ijru/4.0.0/e.ijru.fs.dd.ddsf.3.75@4.0.0.js'
 import eIjruFsDdDdpf475400 from '../preconfigured/competition-events/ijru/4.0.0/e.ijru.fs.dd.ddpf.4.75@4.0.0.js'
 import eIjruFsWhWhpf275400 from '../preconfigured/competition-events/ijru/4.0.0/e.ijru.fs.wh.whpf.2.75@4.0.0.js'
-import eIjruFsTsSctf8300 from '../preconfigured/competition-events/ijru/5.0.0/e.ijru.fs.ts.sctf.8.300@5.0.0.js'
+import eIjruFsTsSctf8360 from '../preconfigured/competition-events/ijru/5.0.0/e.ijru.fs.ts.sctf.8.360@5.0.0.js'
 import eIjruOaSrIsro10400 from '../preconfigured/overalls/ijru/4.0.0/e.ijru.oa.sr.isro.1.0@4.0.0.js'
 import eIjruOaXdTxdo40400 from '../preconfigured/overalls/ijru/4.0.0/e.ijru.oa.xd.txdo.4.0@4.0.0.js'
 
@@ -44,7 +44,7 @@ export default {
     eIjruFsDdDdpf475400,
     eIjruFsWhWhpf275400,
 
-    eIjruFsTsSctf8300,
+    eIjruFsTsSctf8360,
 
     // TODO: DDC
   ],

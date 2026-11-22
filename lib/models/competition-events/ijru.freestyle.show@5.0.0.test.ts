@@ -28,7 +28,7 @@ void test('ijru.freestyle.show@5.0.0', async t => {
       judgeTypeId: 'T',
       entryId: '1',
       participantId: '1',
-      competitionEvent: 'e.ijru.fs.ts.sctf.8.300@5.0.0',
+      competitionEvent: 'e.ijru.fs.ts.sctf.8.360@5.0.0',
     }
     const judge = mod.technicalJudge
 
@@ -99,7 +99,7 @@ void test('ijru.freestyle.show@5.0.0', async t => {
       judgeTypeId: 'D',
       entryId: '1',
       participantId: '1',
-      competitionEvent: 'e.ijru.fs.ts.sctf.8.300@5.0.0',
+      competitionEvent: 'e.ijru.fs.ts.sctf.8.360@5.0.0',
     }
     const judge = mod.difficultyJudge
 
@@ -195,12 +195,12 @@ void test('ijru.freestyle.show@5.0.0', async t => {
       judgeTypeId: jTId,
       entryId: '1',
       participantId: '1',
-      competitionEvent: 'e.ijru.fs.ts.sctf.8.300@5.0.0',
+      competitionEvent: 'e.ijru.fs.ts.sctf.8.360@5.0.0',
     })
     const eMeta: EntryMeta = {
       entryId: '1',
       participantId: '1',
-      competitionEvent: 'e.ijru.fs.ts.sctf.8.300@5.0.0',
+      competitionEvent: 'e.ijru.fs.ts.sctf.8.360@5.0.0',
     }
     {
       const options = {}
@@ -291,7 +291,7 @@ void test('ijru.freestyle.show@5.0.0', async t => {
     const rMeta = (id: string): EntryMeta => ({
       entryId: id,
       participantId: id,
-      competitionEvent: 'e.ijru.fs.ts.sctf.8.300@5.0.0',
+      competitionEvent: 'e.ijru.fs.ts.sctf.8.360@5.0.0',
     })
 
     await t.test('ranks and normalises', () => {

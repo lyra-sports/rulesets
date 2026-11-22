@@ -3,6 +3,6 @@ import { partiallyConfigureCompetitionEventModel } from '../../../types.js'
 
 export default partiallyConfigureCompetitionEventModel(ijruFreestyleShow500, {
   options: {},
-  id: 'e.ijru.fs.ts.sctf.8.300@5.0.0',
+  id: 'e.ijru.fs.ts.sctf.8.360@5.0.0',
   name: 'Show Freestyle',
 })
